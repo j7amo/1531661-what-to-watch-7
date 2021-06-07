@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MovieCard from '../movie-card/movie-card';
+import SvgInjector from '../svg-injector/svg-injector';
+import SiteLogo from '../site-logo/site-logo';
+import UserBlock from '../user-block/user-block';
 
 function MainPage({promoMovie, movies}) {
-  // const {promoMovie, movies} = props;
   const {
     name,
     genre,
@@ -14,6 +16,7 @@ function MainPage({promoMovie, movies}) {
 
   return (
     <React.Fragment>
+      <SvgInjector />
       <section className="film-card">
         <div className="film-card__bg">
           <img src={background} alt={name}/>
@@ -22,24 +25,8 @@ function MainPage({promoMovie, movies}) {
         <h1 className="visually-hidden">WTW</h1>
 
         <header className="page-header film-card__head">
-          <div className="logo">
-            <a className="logo__link">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
-
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63"/>
-              </div>
-            </li>
-            <li className="user-block__item">
-              <a className="user-block__link">Sign out</a>
-            </li>
-          </ul>
+          <SiteLogo />
+          <UserBlock />
         </header>
 
         <div className="film-card__wrap">
