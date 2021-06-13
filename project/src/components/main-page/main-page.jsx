@@ -1,25 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MovieCard from '../movie-card/movie-card';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
+import MovieList from '../movie-list/movie-list';
+import Footer from '../footer/footer';
 
-function MainPage({promoMovie, movies}) {
+function MainPage({movies}) {
   const {
     name,
     genre,
-    year,
-    background,
-    poster,
-  } = promoMovie;
+    released,
+    backgroundImage,
+    posterImage,
+  } = movies[19];
 
   return (
     <React.Fragment>
       <SvgInjector />
       <section className="film-card">
         <div className="film-card__bg">
-          <img src={background} alt={name}/>
+          <img src={backgroundImage} alt={name}/>
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -32,14 +33,14 @@ function MainPage({promoMovie, movies}) {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src={poster} alt={name} width="218" height="327"/>
+              <img src={posterImage} alt={name} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
               <h2 className="film-card__title">{name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">{genre}</span>
-                <span className="film-card__year">{year}</span>
+                <span className="film-card__year">{released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -98,46 +99,39 @@ function MainPage({promoMovie, movies}) {
             </li>
           </ul>
 
-          <div className="catalog__films-list">
-            {movies.map((movie) => <MovieCard key={movie.name + movie.moviePage} movie={movie}/>)}
-          </div>
+          <MovieList movies={movies}/>
 
           <div className="catalog__more">
             <button className="catalog__button" type="button">Show more</button>
           </div>
         </section>
 
-        <footer className="page-footer">
-          <div className="logo">
-            <a className="logo__link logo__link--light">
-              <span className="logo__letter logo__letter--1">W</span>
-              <span className="logo__letter logo__letter--2">T</span>
-              <span className="logo__letter logo__letter--3">W</span>
-            </a>
-          </div>
-
-          <div className="copyright">
-            <p>© 2019 What to watch Ltd.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </React.Fragment>
   );
 }
 
 MainPage.propTypes = {
-  promoMovie: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    year: PropTypes.number.isRequired,
-    background: PropTypes.string.isRequired,
-    poster: PropTypes.string.isRequired,
-  }).isRequired,
   movies: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      moviePage: PropTypes.string.isRequired,
+      posterImage: PropTypes.string.isRequired,
       previewImage: PropTypes.string.isRequired,
+      backgroundImage: PropTypes.string.isRequired,
+      backgroundColor: PropTypes.string.isRequired,
+      videoLink: PropTypes.string.isRequired,
+      previewVideoLink: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      rating: PropTypes.number.isRequired,
+      scoresCount: PropTypes.number.isRequired,
+      director: PropTypes.string.isRequired,
+      starring: PropTypes.arrayOf(PropTypes.string).isRequired,
+      runTime: PropTypes.number.isRequired,
+      genre: PropTypes.string.isRequired,
+      released: PropTypes.number.isRequired,
+      isFavorite: PropTypes.bool.isRequired,
     })).isRequired,
 };
 

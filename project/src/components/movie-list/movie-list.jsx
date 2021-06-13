@@ -1,35 +1,23 @@
-import React from 'react';
-import SvgInjector from '../svg-injector/svg-injector';
-import SiteLogo from '../site-logo/site-logo';
-import UserBlock from '../user-block/user-block';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import MovieList from '../movie-list/movie-list';
-import Footer from '../footer/footer';
+import MovieCard from '../movie-card/movie-card';
 
-function MyList({movies}) {
+function MovieList({movies}) {
+  const [activeMovie, setActiveMovie] = useState(null);
+
+  function handleMouseOver(movie) {
+    setActiveMovie(movie);
+    return activeMovie; // временно делаю return, чтобы линтер не ругался на неиспользуемые переменные
+  }
 
   return (
-    <React.Fragment>
-      <SvgInjector />
-      <div className="user-page">
-        <header className="page-header user-page__head">
-          <SiteLogo />
-          <h1 className="page-title user-page__title">My list</h1>
-          <UserBlock />
-        </header>
-
-        <section className="catalog">
-          <h2 className="catalog__title visually-hidden">Catalog</h2>
-          <MovieList movies={movies.filter((movie) => movie.isFavorite)} />
-        </section>
-
-        <Footer />
-      </div>
-    </React.Fragment>
+    <div className="catalog__films-list">
+      {movies.map((movie) => <MovieCard key={movie.name + movie.id} movie={movie} handleMouseOver={handleMouseOver}/>)}
+    </div>
   );
 }
 
-MyList.propTypes = {
+MovieList.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -52,4 +40,4 @@ MyList.propTypes = {
     })).isRequired,
 };
 
-export default MyList;
+export default MovieList;
