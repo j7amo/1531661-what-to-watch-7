@@ -34,7 +34,7 @@ function App({movies, reviews}) {
           <AddReview />
         </Route>
         <Route exact path={AppRoute.PLAYER}>
-          <Player />
+          <Player movies={movies}/>
         </Route>
         <Route>
           <NoSuchPage />
