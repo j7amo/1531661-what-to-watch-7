@@ -5,6 +5,7 @@ import UserBlock from '../user-block/user-block';
 import PropTypes from 'prop-types';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
+import movieProp from '../film/film.prop.js';
 
 function MyList({movies}) {
 
@@ -31,25 +32,9 @@ function MyList({movies}) {
 
 MyList.propTypes = {
   movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      posterImage: PropTypes.string.isRequired,
-      previewImage: PropTypes.string.isRequired,
-      backgroundImage: PropTypes.string.isRequired,
-      backgroundColor: PropTypes.string.isRequired,
-      videoLink: PropTypes.string.isRequired,
-      previewVideoLink: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      rating: PropTypes.number.isRequired,
-      scoresCount: PropTypes.number.isRequired,
-      director: PropTypes.string.isRequired,
-      starring: PropTypes.arrayOf(PropTypes.string).isRequired,
-      runTime: PropTypes.number.isRequired,
-      genre: PropTypes.string.isRequired,
-      released: PropTypes.number.isRequired,
-      isFavorite: PropTypes.bool.isRequired,
-    })).isRequired,
+    PropTypes.oneOfType(
+      [movieProp],
+    )).isRequired,
 };
 
 export default MyList;
