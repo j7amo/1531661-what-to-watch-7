@@ -6,3 +6,11 @@ export const AppRoute = {
   ADD_REVIEW: '/films/:id/review',
   PLAYER: '/player/:id',
 };
+
+export const MovieRating = {
+  BAD: 'Bad',
+  NORMAL: 'Normal',
+  GOOD: 'Good',
+  VERY_GOOD: 'Very good',
+  AWESOME: 'Awesome',
+};

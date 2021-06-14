@@ -2,7 +2,7 @@ import React from 'react';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop.js';
 
@@ -28,10 +28,10 @@ function AddReview({movies}) {
             <nav className="breadcrumbs">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <a href={`/films/${id}`} className="breadcrumbs__link">{name}</a>
+                  <Link to={`/films/${id}`} className="breadcrumbs__link">{name}</Link>
                 </li>
                 <li className="breadcrumbs__item">
-                  <a className="breadcrumbs__link">Add review</a>
+                  <Link to={`/films/${id}/review`} className="breadcrumbs__link">Add review</Link>
                 </li>
               </ul>
             </nav>

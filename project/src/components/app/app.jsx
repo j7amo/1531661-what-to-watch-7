@@ -30,7 +30,7 @@ function App({movies, reviews}) {
           <MyList movies={movies}/>
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <Film />
+          <Film movies={movies}/>
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
           <AddReview movies={movies}/>
