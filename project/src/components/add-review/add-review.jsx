@@ -2,8 +2,13 @@ import React from 'react';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
+import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function AddReview() {
+function AddReview({movies}) {
+
+  const { id } = useParams();
+  const { name, backgroundImage, posterImage } = movies.find((movie) => movie.id === Number(id));
 
   return (
     <React.Fragment>
@@ -11,7 +16,7 @@ function AddReview() {
       <section className="film-card film-card--full">
         <div className="film-card__header">
           <div className="film-card__bg">
-            <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel"/>
+            <img src={backgroundImage} alt={name}/>
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -22,7 +27,7 @@ function AddReview() {
             <nav className="breadcrumbs">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <a href="film-page.html" className="breadcrumbs__link">The Grand Budapest Hotel</a>
+                  <a href={`/films/${id}`} className="breadcrumbs__link">{name}</a>
                 </li>
                 <li className="breadcrumbs__item">
                   <a className="breadcrumbs__link">Add review</a>
@@ -34,7 +39,7 @@ function AddReview() {
           </header>
 
           <div className="film-card__poster film-card__poster--small">
-            <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327"/>
+            <img src={posterImage} alt={name} width="218" height="327"/>
           </div>
         </div>
 
@@ -87,5 +92,28 @@ function AddReview() {
     </React.Fragment>
   );
 }
+
+AddReview.propTypes = {
+  movies: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      posterImage: PropTypes.string.isRequired,
+      previewImage: PropTypes.string.isRequired,
+      backgroundImage: PropTypes.string.isRequired,
+      backgroundColor: PropTypes.string.isRequired,
+      videoLink: PropTypes.string.isRequired,
+      previewVideoLink: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      rating: PropTypes.number.isRequired,
+      scoresCount: PropTypes.number.isRequired,
+      director: PropTypes.string.isRequired,
+      starring: PropTypes.arrayOf(PropTypes.string).isRequired,
+      runTime: PropTypes.number.isRequired,
+      genre: PropTypes.string.isRequired,
+      released: PropTypes.number.isRequired,
+      isFavorite: PropTypes.bool.isRequired,
+    })).isRequired,
+};
 
 export default AddReview;

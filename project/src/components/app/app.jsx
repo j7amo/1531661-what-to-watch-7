@@ -31,7 +31,7 @@ function App({movies, reviews}) {
           <Film />
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
-          <AddReview />
+          <AddReview movies={movies}/>
         </Route>
         <Route exact path={AppRoute.PLAYER}>
           <Player movies={movies}/>
