@@ -13,8 +13,10 @@ import Film from '../film/film';
 import AddReview from '../add-review/add-review';
 import Player from '../player/player';
 import NoSuchPage from '../no-such-page/no-such-page';
+import movieProp from '../film/film.prop.js';
+import reviewProp from '../film/review.prop.js';
 
-function App({promoMovie, movies}) {
+function App({movies, reviews}) {
   return (
     <Router>
       <Switch>
@@ -22,19 +24,19 @@ function App({promoMovie, movies}) {
           <SignIn />
         </Route>
         <Route exact path={AppRoute.MAIN}>
-          <MainPage promoMovie={promoMovie} movies={movies}/>
+          <MainPage movies={movies}/>
         </Route>
         <Route exact path={AppRoute.MY_LIST}>
-          <MyList />
+          <MyList movies={movies}/>
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <Film />
+          <Film movies={movies}/>
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
-          <AddReview />
+          <AddReview movies={movies}/>
         </Route>
         <Route exact path={AppRoute.PLAYER}>
-          <Player />
+          <Player movies={movies}/>
         </Route>
         <Route>
           <NoSuchPage />
@@ -45,19 +47,14 @@ function App({promoMovie, movies}) {
 }
 
 App.propTypes = {
-  promoMovie: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    genre: PropTypes.string.isRequired,
-    year: PropTypes.number.isRequired,
-    background: PropTypes.string.isRequired,
-    poster: PropTypes.string.isRequired,
-  }).isRequired,
   movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      moviePage: PropTypes.string.isRequired,
-      previewImage: PropTypes.string.isRequired,
-    })).isRequired,
+    PropTypes.oneOfType(
+      [movieProp],
+    )).isRequired,
+  reviews: PropTypes.arrayOf(
+    PropTypes.oneOfType(
+      [reviewProp],
+    )).isRequired,
 };
 
 export default App;
