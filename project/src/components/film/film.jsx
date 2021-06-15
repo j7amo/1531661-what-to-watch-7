@@ -22,26 +22,19 @@ function Film({movies}) {
     starring,
   } = movies.find((movie) => movie.id === Number(id));
 
-  let movieRating;
-
-  switch (rating) {
-    case rating >= 0 && rating < 3:
-      movieRating = MovieRating.BAD;
-      break;
-    case rating >= 3 && rating < 5:
-      movieRating = MovieRating.NORMAL;
-      break;
-    case rating >= 5 && rating < 8:
-      movieRating = MovieRating.GOOD;
-      break;
-    case rating >= 8 && rating < 10:
-      movieRating = MovieRating.VERY_GOOD;
-      break;
-    case rating === 10:
-      movieRating = MovieRating.AWESOME;
-      break;
-    default:
-      break;
+  function getMovieRating() {
+    switch (rating) {
+      case rating >= 0 && rating < 3:
+        return MovieRating.BAD;
+      case rating >= 3 && rating < 5:
+        return MovieRating.NORMAL;
+      case rating >= 5 && rating < 8:
+        return MovieRating.GOOD;
+      case rating >= 8 && rating < 10:
+        return MovieRating.VERY_GOOD;
+      case rating === 10:
+        return MovieRating.AWESOME;
+    }
   }
 
   return (
@@ -111,7 +104,7 @@ function Film({movies}) {
               <div className="film-rating">
                 <div className="film-rating__score">{rating}</div>
                 <p className="film-rating__meta">
-                  <span className="film-rating__level">{movieRating}</span>
+                  <span className="film-rating__level">{getMovieRating()}</span>
                   <span className="film-rating__count">240 ratings</span>
                 </p>
               </div>
