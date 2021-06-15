@@ -14,3 +14,5 @@ export const MovieRating = {
   VERY_GOOD: 'Very good',
   AWESOME: 'Awesome',
 };
+
+export const STARS_COUNT = 10;

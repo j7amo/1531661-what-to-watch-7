@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getRandomInt } from '../../utils.js';
 import RatingStar from '../rating-star/rating-star';
+import { STARS_COUNT } from '../../const.js';
+import { nanoid } from 'nanoid';
 
 function RatingStars({ratingStars, handleRatingStarsChange}) {
 
   return (
     <div className="rating__stars" onChange={handleRatingStarsChange}>
-      {new Array(10).fill('').map((_,i) => (
-        <RatingStar key={getRandomInt(0, 1000)} index={i} isChecked={ratingStars === 10 - i}/>
+      {new Array(STARS_COUNT).fill('').map((_,i) => (
+        <RatingStar key={nanoid()} index={i} isChecked={ratingStars === STARS_COUNT - i}/>
       ))}
     </div>
   );
