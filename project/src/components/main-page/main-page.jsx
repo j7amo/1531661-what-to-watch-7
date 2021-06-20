@@ -6,9 +6,11 @@ import UserBlock from '../user-block/user-block';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import movieProp from '../film/film.prop.js';
+import {Link} from 'react-router-dom';
 
 function MainPage({movies}) {
   const {
+    id,
     name,
     genre,
     released,
@@ -45,12 +47,14 @@ function MainPage({movies}) {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"/>
-                  </svg>
-                  <span>Play</span>
-                </button>
+                <Link to={`/player/${id}`}>
+                  <button className="btn btn--play film-card__button" type="button">
+                    <svg viewBox="0 0 19 19" width="19" height="19">
+                      <use xlinkHref="#play-s"/>
+                    </svg>
+                    <span>Play</span>
+                  </button>
+                </Link>
                 <button className="btn btn--list film-card__button" type="button">
                   <svg viewBox="0 0 19 20" width="19" height="20">
                     <use xlinkHref="#add"/>

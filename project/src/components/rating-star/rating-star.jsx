@@ -6,7 +6,7 @@ function RatingStar({index, isChecked}) {
 
   return (
     <React.Fragment>
-      <input className="rating__input" id={`star-${STARS_COUNT - index}`} type="radio" name="rating" value={STARS_COUNT - index} checked={isChecked}/>
+      <input className="rating__input" id={`star-${STARS_COUNT - index}`} type="radio" name="rating" value={STARS_COUNT - index} defaultChecked={isChecked}/>
       <label className="rating__label" htmlFor={`star-${STARS_COUNT - index}`}>Rating {STARS_COUNT - index}</label>
     </React.Fragment>
   );
