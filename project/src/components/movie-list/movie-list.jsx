@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import MovieCard from '../movie-card/movie-card';
 import movieProp from '../film/film.prop.js';
 
+const PREVIEW_DELAY = 1000;
+
 function MovieList({movies}) {
   const [activeMovie, setActiveMovie] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -16,12 +18,12 @@ function MovieList({movies}) {
   }
 
   useEffect(() => {
-    const timerID = setTimeout(() => setIsPlaying(true),1000);
+    const timerID = setTimeout(() => setIsPlaying(true), PREVIEW_DELAY);
     return () => {
       setIsPlaying(false);
       clearTimeout(timerID);
     };
-  },[activeMovie]);
+  }, [activeMovie]);
 
   return (
     <div className="catalog__films-list">

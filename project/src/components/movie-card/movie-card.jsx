@@ -16,7 +16,7 @@ function MovieCard({movie, activeMovie, isPlaying, handleMouseOver, handleMouseL
       {previewVideoLink
         ? <Link to={`/films/${id}`}><video src={previewVideoLink} width="280" height="175" muted autoPlay/></Link>
         :
-        <React.Fragment>
+        <>
           <Link to={`/films/${id}`}>
             <div className="small-film-card__image">
               <img src={previewImage} alt={name} width="280" height="175"/>
@@ -25,7 +25,7 @@ function MovieCard({movie, activeMovie, isPlaying, handleMouseOver, handleMouseL
           <h3 className="small-film-card__title">
             <Link className="small-film-card__link" to={`/films/${id}`}>{name}</Link>
           </h3>
-        </React.Fragment>}
+        </>}
     </article>
   );
 }

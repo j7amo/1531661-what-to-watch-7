@@ -27,9 +27,6 @@ function Player({movies}) {
 
     return () => {
       if (videoRef.current) {
-        videoRef.current.onloadeddata = null;
-        videoRef.current.onplay = null;
-        videoRef.current.onpause = null;
         videoRef.current = null;
       }
     };
