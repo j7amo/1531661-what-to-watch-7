@@ -1,30 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import RatingStar from '../rating-star/rating-star';
+import { STARS_COUNT } from '../../const.js';
+import { nanoid } from 'nanoid';
 
 function RatingStars({ratingStars, handleRatingStarsChange}) {
-  const stars = [];
-
-  for (let i = 10; i > 0; i--) {
-    if (ratingStars === i) {
-      stars.push(
-        <React.Fragment>
-          <input className="rating__input" id={`star-${i}`} type="radio" name="rating" value={i} checked/>
-          <label className="rating__label" htmlFor={`star-${i}`}>Rating {i}</label>
-        </React.Fragment>,
-      );
-    } else {
-      stars.push(
-        <React.Fragment>
-          <input className="rating__input" id={`star-${i}`} type="radio" name="rating" value={i}/>
-          <label className="rating__label" htmlFor={`star-${i}`}>Rating {i}</label>
-        </React.Fragment>,
-      );
-    }
-  }
 
   return (
     <div className="rating__stars" onChange={handleRatingStarsChange}>
-      {stars}
+      {new Array(STARS_COUNT).fill('').map((_,i) => (
+        <RatingStar key={nanoid()} index={i} isChecked={ratingStars === STARS_COUNT - i}/>
+      ))}
     </div>
   );
 }
