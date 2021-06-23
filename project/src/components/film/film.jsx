@@ -3,39 +3,23 @@ import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
 import {Link, useParams} from 'react-router-dom';
-import { MovieRating } from '../../const.js';
 import PropTypes from 'prop-types';
-import movieProp from './film.prop';
+import movieProp from './film.prop.js';
+import reviewProp from './review.prop.js';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
+import MovieTabs from '../movie-tabs/movie-tabs';
 
-function Film({movies}) {
+function Film({movies, reviews}) {
   const { id } = useParams();
+  const movie = movies.find((someMovie) => someMovie.id === Number(id));
   const {
     name,
     posterImage,
     backgroundImage,
     genre,
     released,
-    rating,
-    director,
-    starring,
-  } = movies.find((movie) => movie.id === Number(id));
-
-  function getMovieRating() {
-    switch (rating) {
-      case rating >= 0 && rating < 3:
-        return MovieRating.BAD;
-      case rating >= 3 && rating < 5:
-        return MovieRating.NORMAL;
-      case rating >= 5 && rating < 8:
-        return MovieRating.GOOD;
-      case rating >= 8 && rating < 10:
-        return MovieRating.VERY_GOOD;
-      case rating === 10:
-        return MovieRating.AWESOME;
-    }
-  }
+  } = movie;
 
   return (
     <React.Fragment>
@@ -88,48 +72,7 @@ function Film({movies}) {
               <img src={posterImage} alt={`${name} poster`} width="218" height="327"/>
             </div>
 
-            <div className="film-card__desc">
-              <nav className="film-nav film-card__nav">
-                <ul className="film-nav__list">
-                  <li className="film-nav__item film-nav__item--active">
-                    <a href="#" className="film-nav__link">Overview</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Details</a>
-                  </li>
-                  <li className="film-nav__item">
-                    <a href="#" className="film-nav__link">Reviews</a>
-                  </li>
-                </ul>
-              </nav>
-
-              <div className="film-rating">
-                <div className="film-rating__score">{rating}</div>
-                <p className="film-rating__meta">
-                  <span className="film-rating__level">{getMovieRating()}</span>
-                  <span className="film-rating__count">240 ratings</span>
-                </p>
-              </div>
-
-              <div className="film-card__text">
-                <p>In the 1930s, the Grand Budapest Hotel is a popular European ski resort, presided over by concierge
-                  Gustave H. (Ralph Fiennes). Zero, a junior lobby boy, becomes Gustave`s friend and protege.
-                </p>
-                <p>Gustave prides himself on providing first-class service to the hotel`s guests, including satisfying
-                  the sexual needs of the many elderly women who stay there. When one of Gustave`s lovers dies
-                  mysteriously, Gustave finds himself the recipient of a priceless painting and the chief suspect in her
-                  murder.
-                </p>
-
-                <p className="film-card__director"><strong>Director: {director}</strong></p>
-
-                <p className="film-card__starring">
-                  <strong>
-                    Starring: {starring.join(', ')} and other
-                  </strong>
-                </p>
-              </div>
-            </div>
+            <MovieTabs movie={movie} reviews={reviews}/>
           </div>
         </div>
       </section>
@@ -150,6 +93,10 @@ Film.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
+    )).isRequired,
+  reviews: PropTypes.arrayOf(
+    PropTypes.oneOfType(
+      [reviewProp],
     )).isRequired,
 };
 
