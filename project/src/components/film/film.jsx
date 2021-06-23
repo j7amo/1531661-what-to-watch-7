@@ -10,6 +10,15 @@ import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import MovieTabs from '../movie-tabs/movie-tabs';
 
+const MAX_MOVIE_LIST_ROW_NUMBER = 4;
+
+function getMoviesByGenre(movies, displayedMovie) {
+  if (movies.length < MAX_MOVIE_LIST_ROW_NUMBER) {
+    return movies.filter((movie) => movie !== displayedMovie).filter((movie) => movie.genre === displayedMovie.genre).slice(0, movies.length);
+  }
+  return movies.filter((movie) => movie !== displayedMovie).filter((movie) => movie.genre === displayedMovie.genre).slice(0, MAX_MOVIE_LIST_ROW_NUMBER);
+}
+
 function Film({movies, reviews}) {
   const { id } = useParams();
   const movie = movies.find((someMovie) => someMovie.id === Number(id));
@@ -80,7 +89,7 @@ function Film({movies, reviews}) {
       <div className="page-content">
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-          <MovieList movies={movies.slice(0,4)} />
+          <MovieList movies={getMoviesByGenre(movies, movie)} />
         </section>
 
         <Footer />
