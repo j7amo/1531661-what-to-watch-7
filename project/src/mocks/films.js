@@ -36,7 +36,7 @@ export const movies = [
     runTime: getRandomInt(60, 200),
     genre: getRandomElement(genres),
     released: getRandomInt(1950, 2021),
-    isFavorite: false,
+    isFavorite: true,
   },
   {
     id: 2,

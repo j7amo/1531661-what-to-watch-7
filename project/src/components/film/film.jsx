@@ -9,10 +9,17 @@ import reviewProp from './review.prop.js';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import MovieTabs from '../movie-tabs/movie-tabs';
+import {connect} from 'react-redux';
 
 const MAX_MOVIE_LIST_ROW_NUMBER = 4;
 
-function getMoviesByGenre(movies, displayedMovie) {
+const mapStateToProps = (state) => ({
+  movies: state.movies,
+});
+
+const ConnectedFilm = connect(mapStateToProps)(Film);
+
+function getSameGenreMovies(movies, displayedMovie) {
   if (movies.length < MAX_MOVIE_LIST_ROW_NUMBER) {
     return movies.filter((movie) => movie !== displayedMovie).filter((movie) => movie.genre === displayedMovie.genre).slice(0, movies.length);
   }
@@ -89,7 +96,7 @@ function Film({movies, reviews}) {
       <div className="page-content">
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-          <MovieList movies={getMoviesByGenre(movies, movie)} />
+          <MovieList movies={getSameGenreMovies(movies, movie)} />
         </section>
 
         <Footer />
@@ -109,4 +116,4 @@ Film.propTypes = {
     )).isRequired,
 };
 
-export default Film;
+export default ConnectedFilm;

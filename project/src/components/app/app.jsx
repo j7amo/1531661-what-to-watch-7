@@ -24,13 +24,13 @@ function App({movies, reviews}) {
           <SignIn />
         </Route>
         <Route exact path={AppRoute.MAIN}>
-          <MainPage movies={movies}/>
+          <MainPage />
         </Route>
         <Route exact path={AppRoute.MY_LIST}>
-          <MyList movies={movies}/>
+          <MyList />
         </Route>
         <Route exact path={AppRoute.FILM}>
-          <Film movies={movies} reviews={reviews}/>
+          <Film reviews={reviews}/>
         </Route>
         <Route exact path={AppRoute.ADD_REVIEW}>
           <AddReview movies={movies}/>
