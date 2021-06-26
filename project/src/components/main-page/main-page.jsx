@@ -7,8 +7,26 @@ import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import movieProp from '../film/film.prop.js';
 import {Link} from 'react-router-dom';
+import GenresList from '../genres-list/genres-list';
+import {connect} from 'react-redux';
+import {ALL_GENRES} from '../../const';
 
-function MainPage({movies}) {
+const mapStateToProps = (state) => ({
+  currentGenre: state.currentGenre,
+  movies: state.movies,
+});
+
+const ConnectedMainPage = connect(mapStateToProps)(MainPage);
+
+function getMoviesByGenre(movies, genre) {
+  if (genre === ALL_GENRES) {
+    return movies;
+  }
+
+  return movies.filter((movie) => movie.genre === genre);
+}
+
+function MainPage({movies, currentGenre}) {
   const {
     id,
     name,
@@ -70,47 +88,9 @@ function MainPage({movies}) {
       <div className="page-content">
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
-
-          <ul className="catalog__genres-list">
-            <li className="catalog__genres-item catalog__genres-item--active">
-              <a href="#" className="catalog__genres-link">All genres</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Comedies</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Crime</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Documentary</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Dramas</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Horror</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Kids & Family</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Romance</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Sci-Fi</a>
-            </li>
-            <li className="catalog__genres-item">
-              <a href="#" className="catalog__genres-link">Thrillers</a>
-            </li>
-          </ul>
-
-          <MovieList movies={movies}/>
-
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
+          <GenresList />
+          <MovieList movies={getMoviesByGenre(movies, currentGenre)}/>
         </section>
-
         <Footer />
       </div>
     </React.Fragment>
@@ -118,10 +98,11 @@ function MainPage({movies}) {
 }
 
 MainPage.propTypes = {
+  currentGenre: PropTypes.string.isRequired,
   movies: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
     )).isRequired,
 };
 
-export default MainPage;
+export default ConnectedMainPage;

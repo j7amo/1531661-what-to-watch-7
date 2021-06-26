@@ -16,3 +16,4 @@ export const MovieRating = {
 };
 
 export const STARS_COUNT = 10;
+export const ALL_GENRES = 'All genres';
