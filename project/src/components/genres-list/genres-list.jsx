@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {resetRenderedMoviesLimit, setCurrentGenre} from '../../store/action.js';
+import {setCurrentGenre} from '../../store/action.js';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop';
 import {ALL_GENRES} from '../../const';
@@ -15,7 +15,6 @@ const mapDispatchToProps = (dispatch) => ({
     evt.preventDefault();
     if (evt.target.matches('a')) {
       dispatch(setCurrentGenre(evt.target.textContent));
-      dispatch(resetRenderedMoviesLimit());
     }
   },
 });

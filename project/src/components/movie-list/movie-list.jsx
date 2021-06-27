@@ -3,25 +3,21 @@ import PropTypes from 'prop-types';
 import MovieCard from '../movie-card/movie-card';
 import movieProp from '../film/film.prop.js';
 import {connect} from 'react-redux';
-import {addRenderedMoviesLimit} from '../../store/action.js';
 
 const PREVIEW_DELAY = 1000;
+const MOVIE_RENDER_INITIAL_LIMIT = 8;
+const MOVIE_RENDER_STEP = 8;
 
 const mapStateToProps = (state) => ({
-  renderedMoviesLimit: state.renderedMoviesLimit,
+  currentGenre: state.currentGenre,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onMovieRenderCountLimitChange() {
-    dispatch(addRenderedMoviesLimit());
-  },
-});
+const ConnectedMovieList = connect(mapStateToProps)(MovieList);
 
-const ConnectedMovieList = connect(mapStateToProps, mapDispatchToProps)(MovieList);
-
-function MovieList({movies, renderedMoviesLimit, onMovieRenderCountLimitChange}) {
+function MovieList({movies, currentGenre}) {
   const [activeMovie, setActiveMovie] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [renderedMoviesLimit, setRenderedMoviesLimit] = useState(MOVIE_RENDER_INITIAL_LIMIT);
 
   function handleMouseOver(movie) {
     setActiveMovie(movie);
@@ -32,7 +28,7 @@ function MovieList({movies, renderedMoviesLimit, onMovieRenderCountLimitChange})
   }
 
   function handleShowMoreClick() {
-    onMovieRenderCountLimitChange();
+    setRenderedMoviesLimit(renderedMoviesLimit + MOVIE_RENDER_STEP);
   }
 
   useEffect(() => {
@@ -42,6 +38,10 @@ function MovieList({movies, renderedMoviesLimit, onMovieRenderCountLimitChange})
       clearTimeout(timerID);
     };
   }, [activeMovie]);
+
+  useEffect(() => {
+    setRenderedMoviesLimit(MOVIE_RENDER_INITIAL_LIMIT);
+  },[currentGenre]);
 
   return (
     <>
@@ -70,8 +70,7 @@ MovieList.propTypes = {
     PropTypes.oneOfType(
       [movieProp],
     )).isRequired,
-  renderedMoviesLimit: PropTypes.number.isRequired,
-  onMovieRenderCountLimitChange: PropTypes.func.isRequired,
+  currentGenre: PropTypes.string.isRequired,
 };
 
 export default ConnectedMovieList;
