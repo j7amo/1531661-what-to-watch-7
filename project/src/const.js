@@ -17,3 +17,18 @@ export const MovieRating = {
 
 export const STARS_COUNT = 10;
 export const ALL_GENRES = 'All genres';
+
+export const AuthorizationStatus = {
+  AUTH: 'AUTH',
+  NO_AUTH: 'NO_AUTH',
+  UNKNOWN: 'UNKNOWN',
+};
+
+export const APIRoute = {
+  FILMS: '/films',
+  PROMO: '/promo',
+  FAVORITE: '/favorite',
+  COMMENTS: '/comments',
+  LOGIN: '/login',
+  LOGOUT: '/logout',
+};
