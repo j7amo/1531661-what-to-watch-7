@@ -4,8 +4,9 @@ import App from './components/app/app';
 import { reviews } from './mocks/reviews.js';
 import {Provider} from 'react-redux';
 import {store} from './store/store';
-import {fetchMoviesData} from './store/api-actions';
+import {checkAuthorization, fetchMoviesData} from './store/api-actions';
 
+store.dispatch(checkAuthorization());
 store.dispatch(fetchMoviesData());
 
 ReactDOM.render(

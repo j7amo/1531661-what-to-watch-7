@@ -1,13 +1,12 @@
 import { ActionType } from './action.js';
-//import { movies } from '../mocks/films.js';
-// import {AuthorizationStatus} from '../const.js';
+import {AuthorizationStatus} from '../const.js';
 
 const initialState = {
   currentGenre: 'All genres',
   isLoading: false,
   movies: [],
+  authorizationStatus: AuthorizationStatus.UNKNOWN,
   // error: '',
-  // authorizationStatus: AuthorizationStatus.UNKNOWN,
 };
 
 const reducer = (state = initialState, action) => {
@@ -52,18 +51,18 @@ const reducer = (state = initialState, action) => {
     //       ],
     //     })),
     //   };
-    // case ActionType.REQUIRE_AUTHORIZATION:
-    //   return {
-    //     ...state,
-    //     movies: state.movies.map((movie) => ({
-    //       ...movie,
-    //       starring: [
-    //         ...movie.starring,
-    //       ],
-    //     })),
-    //     authorizationStatus: action.payload,
-    //   };
-    // case ActionType.LOGOUT:
+    case ActionType.SET_AUTHORIZATION_STATUS:
+      return {
+        ...state,
+        movies: state.movies.map((movie) => ({
+          ...movie,
+          starring: [
+            ...movie.starring,
+          ],
+        })),
+        authorizationStatus: action.payload,
+      };
+    // case ActionType.SIGN_OUT:
     //   return {
     //     ...state,
     //     movies: state.movies.map((movie) => ({
