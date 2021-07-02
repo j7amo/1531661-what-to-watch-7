@@ -1,7 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {AuthorizationStatus} from '../../const.js';
+import {signOut} from '../../store/api-actions.js';
 
-function UserBlock() {
+function UserBlock({authorizationStatus, onSignOutClick}) {
+
+  const handleOnClick = (evt) => {
+    evt.preventDefault();
+    onSignOutClick();
+  };
+
+  if(authorizationStatus !== AuthorizationStatus.AUTH) {
+    return (
+      <ul className="user-block">
+        <li className="user-block__item">
+        </li>
+        <li className="user-block__item">
+          <Link to="/login" className="user-block__link">Sign in</Link>
+        </li>
+      </ul>
+    );
+  }
 
   return (
     <ul className="user-block">
@@ -13,10 +34,27 @@ function UserBlock() {
         </div>
       </li>
       <li className="user-block__item">
-        <a className="user-block__link">Sign out</a>
+        <a className="user-block__link" onClick={handleOnClick}>Sign out</a>
       </li>
     </ul>
   );
 }
 
-export default UserBlock;
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onSignOutClick() {
+    dispatch(signOut());
+  },
+});
+
+const ConnectedUserBlock = connect(mapStateToProps, mapDispatchToProps)(UserBlock);
+
+UserBlock.propTypes = {
+  authorizationStatus: PropTypes.string.isRequired,
+  onSignOutClick: PropTypes.func.isRequired,
+};
+
+export default ConnectedUserBlock;

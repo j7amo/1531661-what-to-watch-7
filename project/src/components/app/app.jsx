@@ -2,7 +2,7 @@ import React from 'react';
 import MainPage from '../main-page/main-page';
 import PropTypes from 'prop-types';
 import {
-  BrowserRouter as Router,
+  Router,
   Switch,
   Route
 } from 'react-router-dom';
@@ -17,6 +17,8 @@ import movieProp from '../film/film.prop.js';
 import reviewProp from '../film/review.prop.js';
 import {connect} from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen.jsx';
+import {default as PrivateRoute} from '../private-route/private-route';
+import browserHistory from '../../browser-history';
 
 function App({movies, reviews, isLoading}) {
 
@@ -27,7 +29,7 @@ function App({movies, reviews, isLoading}) {
   }
 
   return (
-    <Router>
+    <Router history={browserHistory}>
       <Switch>
         <Route exact path={AppRoute.SIGN_IN}>
           <SignIn />
@@ -35,18 +37,14 @@ function App({movies, reviews, isLoading}) {
         <Route exact path={AppRoute.MAIN}>
           <MainPage />
         </Route>
-        <Route exact path={AppRoute.MY_LIST}>
-          <MyList />
-        </Route>
+        <PrivateRoute exact path={AppRoute.MY_LIST} render={() => <MyList />} />
         <Route exact path={AppRoute.FILM}>
-          <Film reviews={reviews}/>
+          <Film reviews={reviews} />
         </Route>
-        <Route exact path={AppRoute.ADD_REVIEW}>
-          <AddReview movies={movies}/>
-        </Route>
-        <Route exact path={AppRoute.PLAYER}>
-          <Player movies={movies}/>
-        </Route>
+        <PrivateRoute exact path={AppRoute.ADD_REVIEW} render={() => <AddReview movies={movies} />} />
+        <Route exact path={AppRoute.PLAYER} render={({history}) =>
+          <Player movies={movies} onExitClick={() => history.push(AppRoute.MAIN)}/>}
+        />
         <Route>
           <NoSuchPage />
         </Route>
