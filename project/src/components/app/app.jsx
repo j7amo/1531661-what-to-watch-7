@@ -15,8 +15,17 @@ import Player from '../player/player';
 import NoSuchPage from '../no-such-page/no-such-page';
 import movieProp from '../film/film.prop.js';
 import reviewProp from '../film/review.prop.js';
+import {connect} from 'react-redux';
+import LoadingScreen from '../loading-screen/loading-screen.jsx';
 
-function App({movies, reviews}) {
+function App({movies, reviews, isLoading}) {
+
+  if (isLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
   return (
     <Router>
       <Switch>
@@ -46,6 +55,13 @@ function App({movies, reviews}) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  movies: state.movies,
+  isLoading: state.isLoading,
+});
+
+const ConnectedApp = connect(mapStateToProps)(App);
+
 App.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.oneOfType(
@@ -55,6 +71,7 @@ App.propTypes = {
     PropTypes.oneOfType(
       [reviewProp],
     )).isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
-export default App;
+export default ConnectedApp;

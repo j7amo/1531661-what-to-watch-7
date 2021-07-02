@@ -1,6 +1,10 @@
 export const ActionType = {
   SET_CURRENT_GENRE: 'filters/currentGenreSet',
-  SET_MOVIES: 'movies/moviesSet',
+  BEGIN_MOVIES_DATA_FETCH: 'data/moviesDataFetchBegan',
+  SET_MOVIES_DATA: 'data/moviesDataSet',
+  // SET_MOVIES_DATA_ERROR: 'data/moviesDataErrorSet',
+  // REQUIRE_AUTHORIZATION: 'user/authorizationRequired',
+  // LOGOUT: 'user/loggedOut',
 };
 
 export function setCurrentGenre(genre) {
@@ -10,9 +14,36 @@ export function setCurrentGenre(genre) {
   };
 }
 
-export function setMovies(movies) {
+export function beginMoviesDataFetch() {
   return {
-    type: ActionType.SET_MOVIES,
+    type: ActionType.BEGIN_MOVIES_DATA_FETCH,
+  };
+}
+
+export function setMoviesData(movies) {
+  return {
+    type: ActionType.SET_MOVIES_DATA,
     payload: movies,
   };
 }
+
+// export function setMoviesDataError(err) {
+//   return {
+//     type: ActionType.SET_MOVIES_DATA_ERROR,
+//     payload: err,
+//   };
+// }
+
+// export function requireAuthorization(status) {
+//   return {
+//     type: ActionType.REQUIRE_AUTHORIZATION,
+//     payload: status,
+//   };
+// }
+//
+// export function logOut() {
+//   return {
+//     type: ActionType.LOGOUT,
+//   };
+// }
+
