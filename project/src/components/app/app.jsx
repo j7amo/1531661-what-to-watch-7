@@ -42,9 +42,9 @@ function App({movies, reviews, isLoading}) {
           <Film reviews={reviews} />
         </Route>
         <PrivateRoute exact path={AppRoute.ADD_REVIEW} render={() => <AddReview movies={movies} />} />
-        <Route exact path={AppRoute.PLAYER}>
-          <Player movies={movies} />
-        </Route>
+        <Route exact path={AppRoute.PLAYER} render={({history}) =>
+          <Player movies={movies} onExitClick={() => history.push(AppRoute.MAIN)}/>}
+        />
         <Route>
           <NoSuchPage />
         </Route>

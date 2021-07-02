@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import SvgInjector from '../svg-injector/svg-injector';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop.js';
 
-function Player({movies}) {
+function Player({movies, onExitClick}) {
 
   const { id } = useParams();
   const {
@@ -18,7 +18,6 @@ function Player({movies}) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const videoRef = useRef(null);
-  const history = useHistory();
 
   useEffect(() => {
     videoRef.current.onloadeddata = setIsLoading(false);
@@ -43,7 +42,7 @@ function Player({movies}) {
 
   function onExitButtonClick() {
     setIsPlaying(false);
-    history.goBack();
+    onExitClick();
   }
 
   return (
@@ -90,6 +89,7 @@ Player.propTypes = {
     PropTypes.oneOfType(
       [movieProp],
     )).isRequired,
+  onExitClick: PropTypes.func.isRequired,
 };
 
 export default Player;
