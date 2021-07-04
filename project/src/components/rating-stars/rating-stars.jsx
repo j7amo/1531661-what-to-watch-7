@@ -4,12 +4,12 @@ import RatingStar from '../rating-star/rating-star';
 import { STARS_COUNT } from '../../const.js';
 import { nanoid } from 'nanoid';
 
-function RatingStars({ratingStars, handleRatingStarsChange}) {
+function RatingStars({ratingStars, handleRatingStarsChange, isDisabled}) {
 
   return (
     <div className="rating__stars" onChange={handleRatingStarsChange}>
       {new Array(STARS_COUNT).fill('').map((_,i) => (
-        <RatingStar key={nanoid()} index={i} isChecked={ratingStars === STARS_COUNT - i}/>
+        <RatingStar key={nanoid()} index={i} isChecked={ratingStars === STARS_COUNT - i} isDisabled={isDisabled}/>
       ))}
     </div>
   );
@@ -18,6 +18,7 @@ function RatingStars({ratingStars, handleRatingStarsChange}) {
 RatingStars.propTypes = {
   ratingStars: PropTypes.number.isRequired,
   handleRatingStarsChange: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 };
 
 export default RatingStars;

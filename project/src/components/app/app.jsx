@@ -14,13 +14,12 @@ import AddReview from '../add-review/add-review';
 import Player from '../player/player';
 import NoSuchPage from '../no-such-page/no-such-page';
 import movieProp from '../film/film.prop.js';
-import reviewProp from '../film/review.prop.js';
 import {connect} from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen.jsx';
 import {default as PrivateRoute} from '../private-route/private-route';
 import browserHistory from '../../browser-history';
 
-function App({movies, reviews, isLoading}) {
+function App({movies, isLoading}) {
 
   if (isLoading) {
     return (
@@ -38,10 +37,12 @@ function App({movies, reviews, isLoading}) {
           <MainPage />
         </Route>
         <PrivateRoute exact path={AppRoute.MY_LIST} render={() => <MyList />} />
-        <Route exact path={AppRoute.FILM}>
-          <Film reviews={reviews} />
+        <Route exact path={AppRoute.FILM_WITH_ID}>
+          <Film />
         </Route>
-        <PrivateRoute exact path={AppRoute.ADD_REVIEW} render={() => <AddReview movies={movies} />} />
+        <PrivateRoute exact path={AppRoute.ADD_REVIEW} render={({history}) =>
+          <AddReview movies={movies} onFormSubmitClick={(id) => history.push(`${AppRoute.FILMS}/${id}`)}/>}
+        />
         <Route exact path={AppRoute.PLAYER} render={({history}) =>
           <Player movies={movies} onExitClick={() => history.push(AppRoute.MAIN)}/>}
         />
@@ -64,10 +65,6 @@ App.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
-    )).isRequired,
-  reviews: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [reviewProp],
     )).isRequired,
   isLoading: PropTypes.bool.isRequired,
 };

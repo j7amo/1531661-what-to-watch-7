@@ -1,36 +1,33 @@
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const.js';
 import {beginMoviesDataFetch, redirectToRoute, setAuthorizationStatus, setMoviesData} from './action.js';
 
-const adaptMovieDataToClient = (dataFromServer) => (
+export const adaptMovieDataToClient = (dataFromServer) => {
 
-  dataFromServer.map((movie) => {
+  const adaptedMovie = {
+    ...dataFromServer,
+    backgroundColor: dataFromServer['background_color'],
+    backgroundImage: dataFromServer['background_image'],
+    isFavorite: dataFromServer['is_favorite'],
+    posterImage: dataFromServer['poster_image'],
+    previewImage: dataFromServer['preview_image'],
+    previewVideoLink: dataFromServer['preview_video_link'],
+    runTime: dataFromServer['run_time'],
+    scoresCount: dataFromServer['scores_count'],
+    videoLink: dataFromServer['video_link'],
+  };
 
-    const adaptedMovie = {
-      ...movie,
-      backgroundColor: movie['background_color'],
-      backgroundImage: movie['background_image'],
-      isFavorite: movie['is_favorite'],
-      posterImage: movie['poster_image'],
-      previewImage: movie['preview_image'],
-      previewVideoLink: movie['preview_video_link'],
-      runTime: movie['run_time'],
-      scoresCount: movie['scores_count'],
-      videoLink: movie['video_link'],
-    };
+  delete adaptedMovie.background_color;
+  delete adaptedMovie.background_image;
+  delete adaptedMovie.is_favorite;
+  delete adaptedMovie.poster_image;
+  delete adaptedMovie.preview_image;
+  delete adaptedMovie.preview_video_link;
+  delete adaptedMovie.run_time;
+  delete adaptedMovie.scores_count;
+  delete adaptedMovie.video_link;
 
-    delete adaptedMovie.background_color;
-    delete adaptedMovie.background_image;
-    delete adaptedMovie.is_favorite;
-    delete adaptedMovie.poster_image;
-    delete adaptedMovie.preview_image;
-    delete adaptedMovie.preview_video_link;
-    delete adaptedMovie.run_time;
-    delete adaptedMovie.scores_count;
-    delete adaptedMovie.video_link;
-
-    return adaptedMovie;
-  })
-);
+  return adaptedMovie;
+};
 
 // const adaptMovieDataToServer = (dataFromClient) => {
 // };
@@ -38,7 +35,7 @@ const adaptMovieDataToClient = (dataFromServer) => (
 export const fetchMoviesData = () => (dispatch, _getState, api) => {
   dispatch(beginMoviesDataFetch());
   api.get(APIRoute.FILMS)
-    .then(({data}) => dispatch(setMoviesData(adaptMovieDataToClient(data))));
+    .then(({data}) => dispatch(setMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))));
 };
 
 export const checkAuthorization = () => (dispatch, _getState, api) => {

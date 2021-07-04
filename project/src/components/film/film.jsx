@@ -1,34 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
 import {Link, useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
-import movieProp from './film.prop.js';
-import reviewProp from './review.prop.js';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import MovieTabs from '../movie-tabs/movie-tabs';
 import {connect} from 'react-redux';
+import {APIRoute, AuthorizationStatus} from '../../const';
+import {createApi} from '../../services/api.js';
+import {adaptMovieDataToClient} from '../../store/api-actions';
+import LoadingScreen from '../loading-screen/loading-screen';
+import NoSuchPage from '../no-such-page/no-such-page';
 
-const MAX_MOVIE_LIST_ROW_NUMBER = 4;
+const MAX_SIMILAR_MOVIES_NUMBER = 4;
 
-const mapStateToProps = (state) => ({
-  movies: state.movies,
-});
+const api = createApi(() => {});
 
-const ConnectedFilm = connect(mapStateToProps)(Film);
+function Film({authorizationStatus}) {
 
-function getSameGenreMovies(movies, displayedMovie) {
-  if (movies.length < MAX_MOVIE_LIST_ROW_NUMBER) {
-    return movies.filter((movie) => movie !== displayedMovie).filter((movie) => movie.genre === displayedMovie.genre).slice(0, movies.length);
-  }
-  return movies.filter((movie) => movie !== displayedMovie).filter((movie) => movie.genre === displayedMovie.genre).slice(0, MAX_MOVIE_LIST_ROW_NUMBER);
-}
-
-function Film({movies, reviews}) {
   const { id } = useParams();
-  const movie = movies.find((someMovie) => someMovie.id === Number(id));
+  const [isLoading, setIsLoading] = useState(true);
+  const [movie, setMovie] = useState({});
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const [movieComments, setMovieComments] = useState([]);
+  const [incorrectMovieIDRequested, setIncorrectMovieIDRequested] = useState(false);
+
   const {
     name,
     posterImage,
@@ -36,6 +34,34 @@ function Film({movies, reviews}) {
     genre,
     released,
   } = movie;
+
+  useEffect(() => {
+    Promise.all([
+      api.get(`${APIRoute.FILMS}/${id}`)
+        .then(({data}) => setMovie(adaptMovieDataToClient(data)))
+        .catch(() => setIncorrectMovieIDRequested(true)),
+      api.get(`${APIRoute.FILMS}/${id}/similar`)
+        .then(({data}) => {
+          setSimilarMovies(data.filter((localMovie) => localMovie.id !== Number(id)).slice(0, MAX_SIMILAR_MOVIES_NUMBER).map((localMovie) => adaptMovieDataToClient(localMovie)));
+        })
+        .catch(() => setIncorrectMovieIDRequested(true)),
+      api.get(`${APIRoute.COMMENTS}/${id}`)
+        .then(({data}) => setMovieComments(data))
+        .catch(() => setIncorrectMovieIDRequested(true)),
+    ]).then(() => setIsLoading(false));
+  },[id]);
+
+  if (incorrectMovieIDRequested) {
+    return (
+      <NoSuchPage />
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     <React.Fragment>
@@ -76,7 +102,8 @@ function Film({movies, reviews}) {
                   </svg>
                   <span>My list</span>
                 </button>
-                <Link to={`/films/${id}/review`} className="btn film-card__button">Add review</Link>
+                {authorizationStatus === AuthorizationStatus.AUTH
+                && <Link to={`/films/${id}/review`} className="btn film-card__button">Add review</Link>}
               </div>
             </div>
           </div>
@@ -88,7 +115,7 @@ function Film({movies, reviews}) {
               <img src={posterImage} alt={`${name} poster`} width="218" height="327"/>
             </div>
 
-            <MovieTabs movie={movie} reviews={reviews}/>
+            <MovieTabs movie={movie} reviews={movieComments}/>
           </div>
         </div>
       </section>
@@ -96,7 +123,7 @@ function Film({movies, reviews}) {
       <div className="page-content">
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-          <MovieList movies={getSameGenreMovies(movies, movie)} />
+          <MovieList movies={similarMovies} />
         </section>
 
         <Footer />
@@ -105,15 +132,14 @@ function Film({movies, reviews}) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  authorizationStatus: state.authorizationStatus,
+});
+
+const ConnectedFilm = connect(mapStateToProps)(Film);
+
 Film.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [movieProp],
-    )).isRequired,
-  reviews: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [reviewProp],
-    )).isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
 };
 
 export default ConnectedFilm;

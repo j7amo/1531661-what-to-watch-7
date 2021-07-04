@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reviewProp from '../film/review.prop.js';
-import {getFixedLengthArrayOfRandomElements, getRandomInt} from '../../utils';
 import Review from '../review/review.jsx';
 
 function MovieReviews({reviews}) {
-  const currentReviews = getFixedLengthArrayOfRandomElements(reviews, getRandomInt(0, reviews.length));
-  const currentReviewsLeft = currentReviews.slice(0, Math.round(currentReviews.length / 2));
-  const currentReviewsRight = currentReviews.slice(currentReviews.length - Math.round(currentReviews.length / 2) + 1);
+  const currentReviewsLeft = reviews.slice(0, Math.round(reviews.length / 2));
+  const currentReviewsRight = reviews.slice(Math.round(reviews.length / 2));
 
   return (
     <div className="film-card__reviews film-card__row">

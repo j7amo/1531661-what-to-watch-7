@@ -6,7 +6,6 @@ const initialState = {
   isLoading: false,
   movies: [],
   authorizationStatus: AuthorizationStatus.UNKNOWN,
-  // error: '',
 };
 
 const reducer = (state = initialState, action) => {
@@ -39,18 +38,6 @@ const reducer = (state = initialState, action) => {
         isLoading: false,
         movies: action.payload,
       };
-    // case ActionType.SET_MOVIES_DATA_ERROR:
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     error: action.payload,
-    //     movies: state.movies.map((movie) => ({
-    //       ...movie,
-    //       starring: [
-    //         ...movie.starring,
-    //       ],
-    //     })),
-    //   };
     case ActionType.SET_AUTHORIZATION_STATUS:
       return {
         ...state,
@@ -62,17 +49,6 @@ const reducer = (state = initialState, action) => {
         })),
         authorizationStatus: action.payload,
       };
-    // case ActionType.SIGN_OUT:
-    //   return {
-    //     ...state,
-    //     movies: state.movies.map((movie) => ({
-    //       ...movie,
-    //       starring: [
-    //         ...movie.starring,
-    //       ],
-    //     })),
-    //     authorizationStatus: AuthorizationStatus.NO_AUTH,
-    //   };
     default:
       return state;
   }
