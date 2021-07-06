@@ -1,5 +1,11 @@
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const.js';
-import {beginMoviesDataFetch, redirectToRoute, setAuthorizationStatus, setMoviesData} from './action.js';
+import {
+  beginMovieDataFetch,
+  beginMoviesDataFetch,
+  redirectToRoute,
+  setAuthorizationStatus, setIncorrectMovieIDRequested, setMovieData,
+  setMoviesData
+} from './action.js';
 
 export const adaptMovieDataToClient = (dataFromServer) => {
 
@@ -29,13 +35,20 @@ export const adaptMovieDataToClient = (dataFromServer) => {
   return adaptedMovie;
 };
 
-// const adaptMovieDataToServer = (dataFromClient) => {
-// };
-
 export const fetchMoviesData = () => (dispatch, _getState, api) => {
   dispatch(beginMoviesDataFetch());
   api.get(APIRoute.FILMS)
     .then(({data}) => dispatch(setMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))));
+};
+
+export const fetchMovieData = (id) => (dispatch, _getState, api) => {
+  dispatch(beginMovieDataFetch());
+  Promise.all([
+    api.get(`${APIRoute.FILMS}/${id}`).then(({data}) => data),
+    api.get(`${APIRoute.FILMS}/${id}/similar`).then(({data}) => data),
+    api.get(`${APIRoute.COMMENTS}/${id}`).then(({data}) => data),
+  ]).then((movieData) => dispatch(setMovieData(movieData)))
+    .catch(() => dispatch(setIncorrectMovieIDRequested()));
 };
 
 export const checkAuthorization = () => (dispatch, _getState, api) => {

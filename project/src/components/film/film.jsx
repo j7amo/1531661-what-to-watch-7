@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
@@ -8,24 +8,16 @@ import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import MovieTabs from '../movie-tabs/movie-tabs';
 import {connect} from 'react-redux';
-import {APIRoute, AuthorizationStatus} from '../../const';
-import {createApi} from '../../services/api.js';
-import {adaptMovieDataToClient} from '../../store/api-actions';
+import {AuthorizationStatus} from '../../const';
 import LoadingScreen from '../loading-screen/loading-screen';
 import NoSuchPage from '../no-such-page/no-such-page';
+import movieProp from '../film/film.prop.js';
+import commentProp from '../film/film.prop.js';
+import {fetchMovieData} from '../../store/api-actions';
 
-const MAX_SIMILAR_MOVIES_NUMBER = 4;
-
-const api = createApi(() => {});
-
-function Film({authorizationStatus}) {
+function Film({isLoading, currentMovie, currentSimilarMovies, currentComments, incorrectMovieIDRequested, authorizationStatus, onFilmComponentLayoutRendered}) {
 
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
-  const [movie, setMovie] = useState({});
-  const [similarMovies, setSimilarMovies] = useState([]);
-  const [movieComments, setMovieComments] = useState([]);
-  const [incorrectMovieIDRequested, setIncorrectMovieIDRequested] = useState(false);
 
   const {
     name,
@@ -33,25 +25,16 @@ function Film({authorizationStatus}) {
     backgroundImage,
     genre,
     released,
-  } = movie;
+  } = currentMovie;
 
   useEffect(() => {
-    Promise.all([
-      api.get(`${APIRoute.FILMS}/${id}`)
-        .then(({data}) => setMovie(adaptMovieDataToClient(data)))
-        .catch(() => setIncorrectMovieIDRequested(true)),
-      api.get(`${APIRoute.FILMS}/${id}/similar`)
-        .then(({data}) => {
-          setSimilarMovies(data.filter((localMovie) => localMovie.id !== Number(id)).slice(0, MAX_SIMILAR_MOVIES_NUMBER).map((localMovie) => adaptMovieDataToClient(localMovie)));
-        })
-        .catch(() => setIncorrectMovieIDRequested(true)),
-      api.get(`${APIRoute.COMMENTS}/${id}`)
-        .then(({data}) => setMovieComments(data))
-        .catch(() => setIncorrectMovieIDRequested(true)),
-    ]).then(() => setIsLoading(false));
-  },[id]);
+    if (currentMovie.id !== Number(id)) {
+      onFilmComponentLayoutRendered(id);
+    }
+  });
 
   if (incorrectMovieIDRequested) {
+    console.log('incorrectMovieIDRequested');
     return (
       <NoSuchPage />
     );
@@ -115,7 +98,7 @@ function Film({authorizationStatus}) {
               <img src={posterImage} alt={`${name} poster`} width="218" height="327"/>
             </div>
 
-            <MovieTabs movie={movie} reviews={movieComments}/>
+            <MovieTabs movie={currentMovie} reviews={currentComments}/>
           </div>
         </div>
       </section>
@@ -123,7 +106,7 @@ function Film({authorizationStatus}) {
       <div className="page-content">
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-          <MovieList movies={similarMovies} />
+          <MovieList movies={currentSimilarMovies} />
         </section>
 
         <Footer />
@@ -133,13 +116,30 @@ function Film({authorizationStatus}) {
 }
 
 const mapStateToProps = (state) => ({
+  isLoading: state.isLoading,
+  currentMovie: state.currentMovie,
+  currentSimilarMovies: state.currentSimilarMovies,
+  currentComments: state.currentComments,
+  incorrectMovieIDRequested: state.incorrectMovieIDRequested,
   authorizationStatus: state.authorizationStatus,
 });
 
-const ConnectedFilm = connect(mapStateToProps)(Film);
+const mapDispatchToProps = (dispatch) => ({
+  onFilmComponentLayoutRendered(id) {
+    dispatch(fetchMovieData(id));
+  }
+});
+
+const ConnectedFilm = connect(mapStateToProps, mapDispatchToProps)(Film);
 
 Film.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  currentMovie: PropTypes.oneOfType([movieProp]),
+  currentSimilarMovies: PropTypes.arrayOf(PropTypes.oneOfType([movieProp])).isRequired,
+  currentComments: PropTypes.arrayOf(PropTypes.oneOfType([commentProp])).isRequired,
+  incorrectMovieIDRequested: PropTypes.bool.isRequired,
   authorizationStatus: PropTypes.string.isRequired,
+  onFilmComponentLayoutRendered: PropTypes.func.isRequired,
 };
 
 export default ConnectedFilm;

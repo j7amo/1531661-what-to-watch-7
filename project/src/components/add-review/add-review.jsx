@@ -19,6 +19,7 @@ function AddReview({movies, onFormSubmitClick}) {
 
   const [ratingStars, setRatingStars] = useState(0);
   const [reviewText, setReviewText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitCounter, setSubmitCounter] = useState(0);
   const [isDisabled, setIsDisabled] = useState(false);
   const [errorEncountered, setErrorEncountered] = useState('');
@@ -37,6 +38,7 @@ function AddReview({movies, onFormSubmitClick}) {
 
   function handleCommentSubmit(evt) {
     evt.preventDefault();
+    setIsSubmitting(true);
     setSubmitCounter(submitCounter + 1);
     setIsDisabled(true);
   }
