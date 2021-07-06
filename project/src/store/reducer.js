@@ -77,10 +77,12 @@ const reducer = (state = initialState, action) => {
             ...state.user,
           },
         })),
+        incorrectMovieIDRequested: false,
       };
     case ActionType.SET_INCORRECT_MOVIE_ID_REQUESTED:
       return {
         ...state,
+        isLoading: false,
         movies: state.movies.map((movie) => ({
           ...movie,
           starring: [
@@ -106,6 +108,36 @@ const reducer = (state = initialState, action) => {
           },
         })),
         incorrectMovieIDRequested: true,
+      };
+    case ActionType.RESET_INCORRECT_MOVIE_ID_REQUESTED:
+      return {
+        ...state,
+        isLoading: false,
+        movies: state.movies.map((movie) => ({
+          ...movie,
+          starring: [
+            ...movie.starring,
+          ],
+        })),
+        currentMovie: {
+          ...state.currentMovie,
+          starring: [
+            ...state.currentMovie.starring,
+          ]
+        },
+        currentSimilarMovies: state.currentSimilarMovies.map((movie) => ({
+          ...movie,
+          starring: [
+            ...movie.starring,
+          ],
+        })),
+        currentComments: state.currentComments.map((comment) => ({
+          ...comment,
+          user: {
+            ...state.user,
+          },
+        })),
+        incorrectMovieIDRequested: false,
       };
     case ActionType.SET_MOVIES_DATA:
       return {
@@ -144,6 +176,7 @@ const reducer = (state = initialState, action) => {
         currentMovie: adaptMovieDataToClient(action.payload[0]),
         currentSimilarMovies: action.payload[1].filter((localMovie) => localMovie.id !== Number(action.payload[0].id)).slice(0, MAX_SIMILAR_MOVIES_NUMBER).map((similarMovie) => adaptMovieDataToClient(similarMovie)),
         currentComments: action.payload[2],
+        incorrectMovieIDRequested: false,
       };
     case ActionType.SET_AUTHORIZATION_STATUS:
       return {

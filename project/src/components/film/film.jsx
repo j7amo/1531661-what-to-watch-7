@@ -15,7 +15,17 @@ import movieProp from '../film/film.prop.js';
 import commentProp from '../film/film.prop.js';
 import {fetchMovieData} from '../../store/api-actions';
 
-function Film({isLoading, currentMovie, currentSimilarMovies, currentComments, incorrectMovieIDRequested, authorizationStatus, onFilmComponentLayoutRendered}) {
+function Film(props) {
+
+  const {
+    isLoading,
+    currentMovie,
+    currentSimilarMovies,
+    currentComments,
+    incorrectMovieIDRequested,
+    authorizationStatus,
+    onFilmComponentLayoutRendered,
+  } = props;
 
   const { id } = useParams();
 
@@ -28,21 +38,21 @@ function Film({isLoading, currentMovie, currentSimilarMovies, currentComments, i
   } = currentMovie;
 
   useEffect(() => {
-    if (currentMovie.id !== Number(id)) {
+    if (currentMovie.id !== Number(id) && !incorrectMovieIDRequested) {
       onFilmComponentLayoutRendered(id);
     }
   });
 
-  if (incorrectMovieIDRequested) {
-    console.log('incorrectMovieIDRequested');
-    return (
-      <NoSuchPage />
-    );
-  }
 
   if (isLoading) {
     return (
       <LoadingScreen />
+    );
+  }
+
+  if (incorrectMovieIDRequested) {
+    return (
+      <NoSuchPage />
     );
   }
 

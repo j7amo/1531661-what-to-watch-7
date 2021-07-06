@@ -2,6 +2,7 @@ export const ActionType = {
   SET_CURRENT_GENRE: 'filters/currentGenreSet',
   BEGIN_MOVIES_DATA_FETCH: 'data/moviesDataFetchBegan',
   SET_INCORRECT_MOVIE_ID_REQUESTED: 'data/incorrectMovieIDRequestedSet',
+  RESET_INCORRECT_MOVIE_ID_REQUESTED: 'data/incorrectMovieIDRequestedReset',
   SET_MOVIES_DATA: 'data/moviesDataSet',
   SET_MOVIE_DATA: 'data/movieDataSet',
   SET_AUTHORIZATION_STATUS: 'user/authorizationStatusSet',
@@ -30,6 +31,12 @@ export function beginMovieDataFetch() {
 export function setIncorrectMovieIDRequested() {
   return {
     type: ActionType.SET_INCORRECT_MOVIE_ID_REQUESTED,
+  }
+}
+
+export function resetIncorrectMovieIDRequested() {
+  return {
+    type: ActionType.RESET_INCORRECT_MOVIE_ID_REQUESTED,
   }
 }
 
