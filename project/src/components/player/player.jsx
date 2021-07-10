@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom';
 import SvgInjector from '../svg-injector/svg-injector';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop.js';
+import {connect} from "react-redux";
 
 function Player({movies, onExitClick}) {
 
@@ -92,4 +93,10 @@ Player.propTypes = {
   onExitClick: PropTypes.func.isRequired,
 };
 
-export default Player;
+const mapStateToProps = (state) => ({
+  movies: state.movies.movies,
+});
+
+const ConnectedPlayer = connect(mapStateToProps)(Player);
+
+export default ConnectedPlayer;

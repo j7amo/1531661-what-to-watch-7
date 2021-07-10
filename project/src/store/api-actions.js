@@ -1,10 +1,11 @@
 import {APIRoute, AppRoute, AuthorizationStatus} from '../const.js';
 import {
-  beginMovieDataFetch,
   beginMoviesDataFetch,
-  redirectToRoute,
-  setAuthorizationStatus, setIncorrectMovieIDRequested, setMovieData,
-  setMoviesData
+  setMoviesData,
+  beginCurrentMovieDataFetch,
+  setCurrentMovieData,
+  setAuthorizationStatus,
+  redirectToRoute, setCurrentMovieError, setMoviesError, setCommentPostData, setCommentPostError, beginCommentPost,
 } from './action.js';
 
 export const adaptMovieDataToClient = (dataFromServer) => {
@@ -38,17 +39,18 @@ export const adaptMovieDataToClient = (dataFromServer) => {
 export const fetchMoviesData = () => (dispatch, _getState, api) => {
   dispatch(beginMoviesDataFetch());
   api.get(APIRoute.FILMS)
-    .then(({data}) => dispatch(setMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))));
+    .then(({data}) => dispatch(setMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))))
+    .catch((err) => dispatch(setMoviesError(err.message)));
 };
 
-export const fetchMovieData = (id) => (dispatch, _getState, api) => {
-  dispatch(beginMovieDataFetch());
+export const fetchCurrentMovieData = (id) => (dispatch, _getState, api) => {
+  dispatch(beginCurrentMovieDataFetch());
   Promise.all([
     api.get(`${APIRoute.FILMS}/${id}`).then(({data}) => data),
     api.get(`${APIRoute.FILMS}/${id}/similar`).then(({data}) => data),
     api.get(`${APIRoute.COMMENTS}/${id}`).then(({data}) => data),
-  ]).then((movieData) => dispatch(setMovieData(movieData)))
-    .catch(() => dispatch(setIncorrectMovieIDRequested()));
+  ]).then((movieData) => dispatch(setCurrentMovieData(movieData)))
+    .catch((err) => dispatch(setCurrentMovieError(err.message)));
 };
 
 export const checkAuthorization = () => (dispatch, _getState, api) => {
@@ -67,5 +69,14 @@ export const signIn = (credentials) => (dispatch, _getState, api) => {
 export const signOut = () => (dispatch, _getState, api) => {
   api.delete(APIRoute.SIGN_OUT)
     .then(() => localStorage.removeItem('token'))
-    .then(() => dispatch(setAuthorizationStatus(AuthorizationStatus.NO_AUTH)));
+    .then(() => dispatch(setAuthorizationStatus(AuthorizationStatus.NO_AUTH)))
+    .then(() => dispatch(redirectToRoute(AppRoute.MAIN)));
+};
+
+export const postComment = ({id, rating, comment}) => (dispatch, _getState, api) => {
+  dispatch(beginCommentPost());
+  api.post(`${APIRoute.COMMENTS}/${id}`, {rating, comment})
+    .then(({data}) => dispatch(setCommentPostData(data)))
+    .then(() => dispatch(redirectToRoute(`${AppRoute.FILMS}/${id}`)))
+    .catch((err) => dispatch(setCommentPostError(err)));
 };

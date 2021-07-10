@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
+import { ToastMessages } from '../../const.js';
 
 const TOAST_DURATION = 10000;
 
 function ToastMessage({message}) {
 
+  if(message.includes('400')) {
+    message = ToastMessages.REVIEW_ADD_ERROR;
+  }
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {

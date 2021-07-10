@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {resetIncorrectMovieIDRequested} from '../../store/action';
+import { clearCurrentMovieError } from '../../store/action.js';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 function NoSuchPage({onGoToMainClick}) {
 
@@ -17,9 +18,13 @@ function NoSuchPage({onGoToMainClick}) {
   );
 }
 
+NoSuchPage.propTypes = {
+  onGoToMainClick: PropTypes.func.isRequired,
+}
+
 const mapDispatchToProps = (dispatch) => ({
   onGoToMainClick() {
-    dispatch(resetIncorrectMovieIDRequested());
+    dispatch(clearCurrentMovieError());
   }
 });
 

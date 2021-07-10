@@ -1,28 +1,28 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
-import {Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import MovieTabs from '../movie-tabs/movie-tabs';
-import {connect} from 'react-redux';
-import {AuthorizationStatus} from '../../const';
+import { connect } from 'react-redux';
+import { AuthorizationStatus, RequestResult, RequestStatus } from '../../const';
 import LoadingScreen from '../loading-screen/loading-screen';
 import NoSuchPage from '../no-such-page/no-such-page';
 import movieProp from '../film/film.prop.js';
 import commentProp from '../film/film.prop.js';
-import {fetchMovieData} from '../../store/api-actions';
+import { fetchCurrentMovieData } from '../../store/api-actions';
 
 function Film(props) {
 
   const {
     isLoading,
+    loadingResult,
     currentMovie,
     currentSimilarMovies,
     currentComments,
-    incorrectMovieIDRequested,
     authorizationStatus,
     onFilmComponentLayoutRendered,
   } = props;
@@ -38,19 +38,19 @@ function Film(props) {
   } = currentMovie;
 
   useEffect(() => {
-    if (currentMovie.id !== Number(id) && !incorrectMovieIDRequested) {
+    if (currentMovie.id !== Number(id) && (loadingResult === RequestResult.SUCCEEDED || loadingResult === null) && isLoading !== RequestStatus.LOADING) {
       onFilmComponentLayoutRendered(id);
     }
   });
 
 
-  if (isLoading) {
+  if (isLoading === RequestStatus.LOADING) {
     return (
       <LoadingScreen />
     );
   }
 
-  if (incorrectMovieIDRequested) {
+  if (loadingResult === RequestResult.FAILED) {
     return (
       <NoSuchPage />
     );
@@ -125,31 +125,31 @@ function Film(props) {
   );
 }
 
+Film.propTypes = {
+  isLoading: PropTypes.string.isRequired,
+  loadingResult: PropTypes.string.isRequired,
+  currentMovie: PropTypes.oneOfType([movieProp]),
+  currentSimilarMovies: PropTypes.arrayOf(PropTypes.oneOfType([movieProp])).isRequired,
+  currentComments: PropTypes.arrayOf(PropTypes.oneOfType([commentProp])).isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
+  onFilmComponentLayoutRendered: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) => ({
-  isLoading: state.isLoading,
-  currentMovie: state.currentMovie,
-  currentSimilarMovies: state.currentSimilarMovies,
-  currentComments: state.currentComments,
-  incorrectMovieIDRequested: state.incorrectMovieIDRequested,
-  authorizationStatus: state.authorizationStatus,
+  isLoading: state.currentMovie.currentMovieRequestStatus,
+  loadingResult: state.currentMovie.currentMovieRequestResult,
+  currentMovie: state.currentMovie.currentMovie,
+  currentSimilarMovies: state.currentMovie.currentSimilarMovies,
+  currentComments: state.currentMovie.currentComments,
+  authorizationStatus: state.authorizationStatus.status,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onFilmComponentLayoutRendered(id) {
-    dispatch(fetchMovieData(id));
+    dispatch(fetchCurrentMovieData(id));
   }
 });
 
 const ConnectedFilm = connect(mapStateToProps, mapDispatchToProps)(Film);
-
-Film.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  currentMovie: PropTypes.oneOfType([movieProp]),
-  currentSimilarMovies: PropTypes.arrayOf(PropTypes.oneOfType([movieProp])).isRequired,
-  currentComments: PropTypes.arrayOf(PropTypes.oneOfType([commentProp])).isRequired,
-  incorrectMovieIDRequested: PropTypes.bool.isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-  onFilmComponentLayoutRendered: PropTypes.func.isRequired,
-};
 
 export default ConnectedFilm;

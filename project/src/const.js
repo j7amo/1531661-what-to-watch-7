@@ -19,6 +19,16 @@ export const MovieRating = {
 export const STARS_COUNT = 10;
 export const ALL_GENRES = 'All genres';
 
+export const RequestStatus = {
+  IDLE: 'idle',
+  LOADING: 'loading',
+};
+
+export const RequestResult = {
+  SUCCEEDED: 'succeeded',
+  FAILED: 'failed',
+};
+
 export const AuthorizationStatus = {
   AUTH: 'AUTH',
   NO_AUTH: 'NO_AUTH',
@@ -35,5 +45,5 @@ export const APIRoute = {
 };
 
 export const ToastMessages = {
-  REVIEW_ADD_ERROR: 'There was a problem when adding your review. Please check if you specified the rating, your comment has correct length (minimum 50 symbols and 400 symbols maximum) and try again!',
+  REVIEW_ADD_ERROR: 'There was a problem while adding your review. Please check if you specified the rating and your comment has correct length (minimum 50 symbols and 400 symbols maximum)',
 };

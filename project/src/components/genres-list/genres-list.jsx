@@ -3,23 +3,7 @@ import {connect} from 'react-redux';
 import {setCurrentGenre} from '../../store/action.js';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop';
-import {ALL_GENRES} from '../../const';
-
-const mapStateToProps = (state) => ({
-  currentGenre: state.currentGenre,
-  movies: state.movies,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onFilterClick(evt) {
-    evt.preventDefault();
-    if (evt.target.matches('a')) {
-      dispatch(setCurrentGenre(evt.target.textContent));
-    }
-  },
-});
-
-const ConnectedGenresList = connect(mapStateToProps, mapDispatchToProps)(GenresList);
+import { ALL_GENRES } from '../../const';
 
 const getUniqueGenres = (movies) => {
   const uniqueGenres = new Set(movies.map((movie) => movie.genre));
@@ -48,5 +32,21 @@ GenresList.propTypes = {
     )).isRequired,
   onFilterClick: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  currentGenre: state.filters.currentGenre,
+  movies: state.movies.movies,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onFilterClick(evt) {
+    evt.preventDefault();
+    if (evt.target.matches('a')) {
+      dispatch(setCurrentGenre(evt.target.textContent));
+    }
+  },
+});
+
+const ConnectedGenresList = connect(mapStateToProps, mapDispatchToProps)(GenresList);
 
 export default ConnectedGenresList;
