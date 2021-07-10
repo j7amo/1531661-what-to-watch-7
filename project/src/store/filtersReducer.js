@@ -10,7 +10,7 @@ const filtersReducer = (state = initialState, action) => {
       return {
         ...state,
         currentGenre: action.payload,
-      }
+      };
     default:
       return state;
   }

@@ -28,7 +28,7 @@ const moviesReducer = (state = initialState, action) => {
         requestStatus: RequestStatus.IDLE,
         requestResult: RequestResult.FAILED,
         error: action.payload,
-      }
+      };
     default:
       return state;
   }

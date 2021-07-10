@@ -147,7 +147,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onFilmComponentLayoutRendered(id) {
     dispatch(fetchCurrentMovieData(id));
-  }
+  },
 });
 
 const ConnectedFilm = connect(mapStateToProps, mapDispatchToProps)(Film);

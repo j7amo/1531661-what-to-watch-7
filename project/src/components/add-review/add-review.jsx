@@ -10,7 +10,7 @@ import { RequestStatus } from '../../const.js';
 import ToastMessage from '../toast-message/toast-message.jsx';
 import { postComment } from '../../store/api-actions.js';
 import { connect } from 'react-redux';
-import {clearCommentPostError} from "../../store/action";
+import {clearCommentPostError} from '../../store/action.js';
 
 const MIN_COMMENT_LENGTH = 50;
 const MAX_COMMENT_LENGTH = 400;
@@ -48,7 +48,7 @@ function AddReview({isLoading, onPageLeave, movies, error, onFormSubmitClick}) {
 
     return () => {
       setIsSubmitting(false);
-    }
+    };
   });
 
   useEffect(() => {
@@ -132,7 +132,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onPageLeave() {
     dispatch(clearCommentPostError());
-  }
+  },
 });
 
 const ConnectedAddReview = connect(mapStateToProps, mapDispatchToProps)(AddReview);

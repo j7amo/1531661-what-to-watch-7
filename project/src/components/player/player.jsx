@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import SvgInjector from '../svg-injector/svg-injector';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop.js';
-import {connect} from "react-redux";
+import {connect} from 'react-redux';
 
 function Player({movies, onExitClick}) {
 

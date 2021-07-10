@@ -20,12 +20,12 @@ function NoSuchPage({onGoToMainClick}) {
 
 NoSuchPage.propTypes = {
   onGoToMainClick: PropTypes.func.isRequired,
-}
+};
 
 const mapDispatchToProps = (dispatch) => ({
   onGoToMainClick() {
     dispatch(clearCurrentMovieError());
-  }
+  },
 });
 
 const ConnectedNoSuchPage = connect(null, mapDispatchToProps)(NoSuchPage);

@@ -5,7 +5,12 @@ import {
   beginCurrentMovieDataFetch,
   setCurrentMovieData,
   setAuthorizationStatus,
-  redirectToRoute, setCurrentMovieError, setMoviesError, setCommentPostData, setCommentPostError, beginCommentPost,
+  redirectToRoute,
+  setCurrentMovieError,
+  setMoviesError,
+  setCommentPostData,
+  setCommentPostError,
+  beginCommentPost
 } from './action.js';
 
 export const adaptMovieDataToClient = (dataFromServer) => {
