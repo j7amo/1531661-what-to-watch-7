@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { STARS_COUNT} from '../../const.js';
 
-function RatingStar({index, isChecked}) {
+function RatingStar({index, isChecked, isDisabled}) {
 
   return (
     <React.Fragment>
-      <input className="rating__input" id={`star-${STARS_COUNT - index}`} type="radio" name="rating" value={STARS_COUNT - index} defaultChecked={isChecked}/>
+      <input className="rating__input" id={`star-${STARS_COUNT - index}`} type="radio" name="rating" value={STARS_COUNT - index} defaultChecked={isChecked} disabled={isDisabled}/>
       <label className="rating__label" htmlFor={`star-${STARS_COUNT - index}`}>Rating {STARS_COUNT - index}</label>
     </React.Fragment>
   );
@@ -15,6 +15,7 @@ function RatingStar({index, isChecked}) {
 RatingStar.propTypes = {
   index: PropTypes.number.isRequired,
   isChecked: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
 };
 
 export default RatingStar;

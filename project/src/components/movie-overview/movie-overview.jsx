@@ -20,6 +20,7 @@ function getMovieRatingLevel(movie) {
 }
 
 function MovieOverview({movie}) {
+  //debugger;
   const {
     rating,
     scoresCount,

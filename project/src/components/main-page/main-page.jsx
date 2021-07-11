@@ -6,17 +6,10 @@ import UserBlock from '../user-block/user-block';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import movieProp from '../film/film.prop.js';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import GenresList from '../genres-list/genres-list';
 import {connect} from 'react-redux';
-import {ALL_GENRES} from '../../const';
-
-const mapStateToProps = (state) => ({
-  currentGenre: state.currentGenre,
-  movies: state.movies,
-});
-
-const ConnectedMainPage = connect(mapStateToProps)(MainPage);
+import { ALL_GENRES } from '../../const';
 
 function getMoviesByGenre(movies, genre) {
   if (genre === ALL_GENRES) {
@@ -104,5 +97,12 @@ MainPage.propTypes = {
       [movieProp],
     )).isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  currentGenre: state.filters.currentGenre,
+  movies: state.movies.movies,
+});
+
+const ConnectedMainPage = connect(mapStateToProps)(MainPage);
 
 export default ConnectedMainPage;

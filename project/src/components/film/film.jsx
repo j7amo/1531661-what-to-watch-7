@@ -1,41 +1,60 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
-import {Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import movieProp from './film.prop.js';
-import reviewProp from './review.prop.js';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import MovieTabs from '../movie-tabs/movie-tabs';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { AuthorizationStatus, RequestResult, RequestStatus } from '../../const';
+import LoadingScreen from '../loading-screen/loading-screen';
+import NoSuchPage from '../no-such-page/no-such-page';
+import movieProp from '../film/film.prop.js';
+import commentProp from '../film/film.prop.js';
+import { fetchCurrentMovieData } from '../../store/api-actions';
 
-const MAX_MOVIE_LIST_ROW_NUMBER = 4;
+function Film(props) {
 
-const mapStateToProps = (state) => ({
-  movies: state.movies,
-});
+  const {
+    isLoading,
+    loadingResult,
+    currentMovie,
+    currentSimilarMovies,
+    currentComments,
+    authorizationStatus,
+    onFilmComponentLayoutRendered,
+  } = props;
 
-const ConnectedFilm = connect(mapStateToProps)(Film);
-
-function getSameGenreMovies(movies, displayedMovie) {
-  if (movies.length < MAX_MOVIE_LIST_ROW_NUMBER) {
-    return movies.filter((movie) => movie !== displayedMovie).filter((movie) => movie.genre === displayedMovie.genre).slice(0, movies.length);
-  }
-  return movies.filter((movie) => movie !== displayedMovie).filter((movie) => movie.genre === displayedMovie.genre).slice(0, MAX_MOVIE_LIST_ROW_NUMBER);
-}
-
-function Film({movies, reviews}) {
   const { id } = useParams();
-  const movie = movies.find((someMovie) => someMovie.id === Number(id));
+
   const {
     name,
     posterImage,
     backgroundImage,
     genre,
     released,
-  } = movie;
+  } = currentMovie;
+
+  useEffect(() => {
+    if (currentMovie.id !== Number(id) && isLoading !== RequestStatus.LOADING) {
+      onFilmComponentLayoutRendered(id);
+    }
+  });
+
+
+  if (isLoading === RequestStatus.LOADING) {
+    return (
+      <LoadingScreen />
+    );
+  }
+
+  if (loadingResult === RequestResult.FAILED) {
+    return (
+      <NoSuchPage />
+    );
+  }
 
   return (
     <React.Fragment>
@@ -76,7 +95,8 @@ function Film({movies, reviews}) {
                   </svg>
                   <span>My list</span>
                 </button>
-                <Link to={`/films/${id}/review`} className="btn film-card__button">Add review</Link>
+                {authorizationStatus === AuthorizationStatus.AUTH
+                && <Link to={`/films/${id}/review`} className="btn film-card__button">Add review</Link>}
               </div>
             </div>
           </div>
@@ -88,7 +108,7 @@ function Film({movies, reviews}) {
               <img src={posterImage} alt={`${name} poster`} width="218" height="327"/>
             </div>
 
-            <MovieTabs movie={movie} reviews={reviews}/>
+            <MovieTabs movie={currentMovie} reviews={currentComments}/>
           </div>
         </div>
       </section>
@@ -96,7 +116,7 @@ function Film({movies, reviews}) {
       <div className="page-content">
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
-          <MovieList movies={getSameGenreMovies(movies, movie)} />
+          <MovieList movies={currentSimilarMovies} />
         </section>
 
         <Footer />
@@ -106,14 +126,30 @@ function Film({movies, reviews}) {
 }
 
 Film.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [movieProp],
-    )).isRequired,
-  reviews: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [reviewProp],
-    )).isRequired,
+  isLoading: PropTypes.string.isRequired,
+  loadingResult: PropTypes.string.isRequired,
+  currentMovie: PropTypes.oneOfType([movieProp]),
+  currentSimilarMovies: PropTypes.arrayOf(PropTypes.oneOfType([movieProp])).isRequired,
+  currentComments: PropTypes.arrayOf(PropTypes.oneOfType([commentProp])).isRequired,
+  authorizationStatus: PropTypes.string.isRequired,
+  onFilmComponentLayoutRendered: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  isLoading: state.currentMovie.currentMovieRequestStatus,
+  loadingResult: state.currentMovie.currentMovieRequestResult,
+  currentMovie: state.currentMovie.currentMovie,
+  currentSimilarMovies: state.currentMovie.currentSimilarMovies,
+  currentComments: state.currentMovie.currentComments,
+  authorizationStatus: state.authorizationStatus.status,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onFilmComponentLayoutRendered(id) {
+    dispatch(fetchCurrentMovieData(id));
+  },
+});
+
+const ConnectedFilm = connect(mapStateToProps, mapDispatchToProps)(Film);
 
 export default ConnectedFilm;

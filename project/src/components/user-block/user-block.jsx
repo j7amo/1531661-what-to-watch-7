@@ -41,7 +41,7 @@ function UserBlock({authorizationStatus, onSignOutClick}) {
 }
 
 const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus,
+  authorizationStatus: state.authorizationStatus.status,
 });
 
 const mapDispatchToProps = (dispatch) => ({
