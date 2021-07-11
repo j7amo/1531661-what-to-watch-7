@@ -4,14 +4,14 @@ import { clearCurrentMovieError } from '../../store/action.js';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-function NoSuchPage({onGoToMainClick}) {
+function NoSuchPage({onMainClick}) {
 
   return (
     <p>
       <p>
         404 Page Not Found
       </p>
-      <Link to='/' onClick={onGoToMainClick}>
+      <Link to='/' onClick={onMainClick}>
         Go to main page!
       </Link>
     </p>
@@ -19,11 +19,11 @@ function NoSuchPage({onGoToMainClick}) {
 }
 
 NoSuchPage.propTypes = {
-  onGoToMainClick: PropTypes.func.isRequired,
+  onMainClick: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onGoToMainClick() {
+  onMainClick() {
     dispatch(clearCurrentMovieError());
   },
 });

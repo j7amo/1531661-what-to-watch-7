@@ -38,7 +38,7 @@ function Film(props) {
   } = currentMovie;
 
   useEffect(() => {
-    if (currentMovie.id !== Number(id) && (loadingResult === RequestResult.SUCCEEDED || loadingResult === null) && isLoading !== RequestStatus.LOADING) {
+    if (currentMovie.id !== Number(id) && isLoading !== RequestStatus.LOADING) {
       onFilmComponentLayoutRendered(id);
     }
   });

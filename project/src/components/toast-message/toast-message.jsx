@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { ToastMessages } from '../../const.js';
 
 const TOAST_DURATION = 10000;
+const ERROR_CODE = '400';
 
 function ToastMessage({message}) {
 
-  if(message.includes('400')) {
+  if (message.includes(ERROR_CODE)) {
     message = ToastMessages.REVIEW_ADD_ERROR;
   }
   const [showToast, setShowToast] = useState(false);

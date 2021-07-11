@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
@@ -28,10 +28,6 @@ function MainPage({movies, currentGenre}) {
     backgroundImage,
     posterImage,
   } = movies[19];
-
-  useEffect(() => {
-
-  });
 
   return (
     <React.Fragment>
