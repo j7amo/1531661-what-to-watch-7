@@ -1,25 +1,23 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
-import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
-import movieProp from '../film/film.prop.js';
 import { Link } from 'react-router-dom';
 import GenresList from '../genres-list/genres-list';
-import {connect} from 'react-redux';
-import { ALL_GENRES } from '../../const';
+import ConnectedMovieListByGenreContainer from "../movie-list-by-genre-container/movie-list-by-genre-container";
+import { connect } from 'react-redux';
+import {
+  getPromoMovieBackgroundImage,
+  getPromoMovieGenre,
+  getPromoMovieID,
+  getPromoMovieName, getPromoMoviePosterImage,
+  getPromoMovieReleasedDate
+} from "../../store/selectors";
 
-function getMoviesByGenre(movies, genre) {
-  if (genre === ALL_GENRES) {
-    return movies;
-  }
+function MainPage(props) {
 
-  return movies.filter((movie) => movie.genre === genre);
-}
-
-function MainPage({movies, currentGenre}) {
   const {
     id,
     name,
@@ -27,7 +25,7 @@ function MainPage({movies, currentGenre}) {
     released,
     backgroundImage,
     posterImage,
-  } = movies[19];
+  } = props;
 
   return (
     <React.Fragment>
@@ -82,7 +80,7 @@ function MainPage({movies, currentGenre}) {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
           <GenresList />
-          <MovieList movies={getMoviesByGenre(movies, currentGenre)}/>
+          <ConnectedMovieListByGenreContainer /*movies={getMoviesByGenre(movies, currentGenre)}*//>
         </section>
         <Footer />
       </div>
@@ -91,18 +89,23 @@ function MainPage({movies, currentGenre}) {
 }
 
 MainPage.propTypes = {
-  currentGenre: PropTypes.string.isRequired,
-  movies: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [movieProp],
-    )).isRequired,
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  genre: PropTypes.string.isRequired,
+  released: PropTypes.number.isRequired,
+  backgroundImage: PropTypes.string.isRequired,
+  posterImage: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  currentGenre: state.filters.currentGenre,
-  movies: state.movies.movies,
+  id: getPromoMovieID(state),
+  name: getPromoMovieName(state),
+  genre: getPromoMovieGenre(state),
+  released: getPromoMovieReleasedDate(state),
+  backgroundImage: getPromoMovieBackgroundImage(state),
+  posterImage: getPromoMoviePosterImage(state),
 });
 
 const ConnectedMainPage = connect(mapStateToProps)(MainPage);
 
-export default ConnectedMainPage;
+export default memo(ConnectedMainPage);

@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
-import {Provider} from 'react-redux';
-import {store} from './store/store';
-import {checkAuthorization, fetchMoviesData} from './store/api-actions';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import { checkAuthorization, fetchMoviesData, fetchPromoMovieData } from './store/api-actions';
 
 store.dispatch(checkAuthorization());
 store.dispatch(fetchMoviesData());
+store.dispatch(fetchPromoMovieData());
 
 ReactDOM.render(
   <React.StrictMode>

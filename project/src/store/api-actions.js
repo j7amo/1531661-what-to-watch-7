@@ -10,7 +10,7 @@ import {
   setMoviesError,
   setCommentPostData,
   setCommentPostError,
-  beginCommentPost
+  beginCommentPost, beginPromoMovieDataFetch, setPromoMovieError, setPromoMovieData
 } from './action.js';
 
 export const adaptMovieDataToClient = (dataFromServer) => {
@@ -46,6 +46,13 @@ export const fetchMoviesData = () => (dispatch, _getState, api) => {
   api.get(APIRoute.FILMS)
     .then(({data}) => dispatch(setMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))))
     .catch((err) => dispatch(setMoviesError(err.message)));
+};
+
+export const fetchPromoMovieData = () => (dispatch, _getState, api) => {
+  dispatch(beginPromoMovieDataFetch());
+  api.get(APIRoute.PROMO)
+    .then(({data}) => dispatch(setPromoMovieData(adaptMovieDataToClient(data))))
+    .catch((err) => dispatch(setPromoMovieError(err)));
 };
 
 export const fetchCurrentMovieData = (id) => (dispatch, _getState, api) => {

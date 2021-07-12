@@ -1,21 +1,16 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {setCurrentGenre} from '../../store/action.js';
+import { connect } from 'react-redux';
+import { setCurrentGenre } from '../../store/action.js';
 import PropTypes from 'prop-types';
-import movieProp from '../film/film.prop';
-import { ALL_GENRES } from '../../const';
-
-const getUniqueGenres = (movies) => {
-  const uniqueGenres = new Set(movies.map((movie) => movie.genre));
-  return [ALL_GENRES, ...Array.from(uniqueGenres)];
-};
+import { getCurrentGenre, getUniqueGenres } from "../../store/selectors";
 
 function GenresList(props) {
-  const {currentGenre, movies, onFilterClick} = props;
+
+  const {currentGenre, uniqueGenres, onFilterClick} = props;
 
   return (
     <ul className="catalog__genres-list" onClick={onFilterClick}>
-      {getUniqueGenres(movies).map((genre) => (
+      {uniqueGenres.map((genre) => (
         <li key={genre} className={`catalog__genres-item ${currentGenre === genre ? 'catalog__genres-item--active' : ''}`}>
           <a href="#" className="catalog__genres-link">{genre}</a>
         </li>
@@ -26,16 +21,13 @@ function GenresList(props) {
 
 GenresList.propTypes = {
   currentGenre: PropTypes.string.isRequired,
-  movies: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [movieProp],
-    )).isRequired,
+  uniqueGenres: PropTypes.arrayOf(PropTypes.string).isRequired,
   onFilterClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  currentGenre: state.filters.currentGenre,
-  movies: state.movies.movies,
+  currentGenre: getCurrentGenre(state),
+  uniqueGenres: getUniqueGenres(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

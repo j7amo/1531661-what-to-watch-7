@@ -3,6 +3,9 @@ export const ActionType = {
   BEGIN_MOVIES_DATA_FETCH: 'data/moviesDataFetchBegan',
   SET_MOVIES_DATA: 'data/moviesDataSet',
   SET_MOVIES_ERROR: 'data/moviesDataErrorSet',
+  BEGIN_PROMO_MOVIE_DATA_FETCH: 'data/promoMovieDataFetchBegan',
+  SET_PROMO_MOVIE_DATA: 'data/promoMovieDataSet',
+  SET_PROMO_MOVIE_ERROR: 'data/promoMovieDataErrorSet',
   BEGIN_CURRENT_MOVIE_DATA_FETCH: 'data/currentMovieDataFetchBegan',
   SET_CURRENT_MOVIE_DATA: 'data/currentMovieDataSet',
   SET_CURRENT_MOVIE_ERROR: 'data/currentMovieErrorSet',
@@ -38,6 +41,26 @@ export function setMoviesData(movies) {
 export function setMoviesError(error) {
   return {
     type: ActionType.SET_MOVIES_ERROR,
+    payload: error,
+  };
+}
+
+export function beginPromoMovieDataFetch() {
+  return {
+    type: ActionType.BEGIN_PROMO_MOVIE_DATA_FETCH,
+  };
+}
+
+export function setPromoMovieData(promoMovie) {
+  return {
+    type: ActionType.SET_PROMO_MOVIE_DATA,
+    payload: promoMovie,
+  };
+}
+
+export function setPromoMovieError(error) {
+  return {
+    type: ActionType.SET_PROMO_MOVIE_ERROR,
     payload: error,
   };
 }

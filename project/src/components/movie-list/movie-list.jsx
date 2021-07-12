@@ -1,18 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import MovieCard from '../movie-card/movie-card';
 import movieProp from '../film/film.prop.js';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
+import { getCurrentGenre } from "../../store/selectors";
 
 const PREVIEW_DELAY = 1000;
 const MOVIE_RENDER_INITIAL_LIMIT = 8;
 const MOVIE_RENDER_STEP = 8;
-
-const mapStateToProps = (state) => ({
-  currentGenre: state.currentGenre,
-});
-
-const ConnectedMovieList = connect(mapStateToProps)(MovieList);
 
 function MovieList({movies, currentGenre}) {
   const [activeMovie, setActiveMovie] = useState(null);
@@ -72,5 +67,11 @@ MovieList.propTypes = {
     )).isRequired,
   currentGenre: PropTypes.string.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  currentGenre: getCurrentGenre(state),
+});
+
+const ConnectedMovieList = connect(mapStateToProps)(MovieList);
 
 export default ConnectedMovieList;
