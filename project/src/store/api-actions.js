@@ -10,7 +10,16 @@ import {
   setMoviesError,
   setCommentPostData,
   setCommentPostError,
-  beginCommentPost, beginPromoMovieDataFetch, setPromoMovieError, setPromoMovieData
+  beginCommentPost,
+  beginPromoMovieDataFetch,
+  setPromoMovieError,
+  setPromoMovieData,
+  beginFavoriteMoviesDataFetch,
+  setFavoriteMoviesData,
+  setFavoriteMoviesError,
+  beginFavoriteMovieStatusPost,
+  setFavoriteMovieStatusPostData,
+  setFavoriteMovieStatusPostError
 } from './action.js';
 
 export const adaptMovieDataToClient = (dataFromServer) => {
@@ -53,6 +62,20 @@ export const fetchPromoMovieData = () => (dispatch, _getState, api) => {
   api.get(APIRoute.PROMO)
     .then(({data}) => dispatch(setPromoMovieData(adaptMovieDataToClient(data))))
     .catch((err) => dispatch(setPromoMovieError(err)));
+};
+
+export const fetchFavoriteMoviesData = () => (dispatch, _getState, api) => {
+  dispatch(beginFavoriteMoviesDataFetch());
+  api.get(APIRoute.FAVORITE)
+    .then(({data}) => dispatch(setFavoriteMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))))
+    .catch((err) => dispatch(setFavoriteMoviesError(err)));
+};
+
+export const postFavoriteMovieStatus = (id, status) => (dispatch, _getState, api) => {
+  dispatch(beginFavoriteMovieStatusPost());
+  api.post(`${APIRoute.FAVORITE}/${id}/${status}`)
+    .then(({data}) => dispatch(setFavoriteMovieStatusPostData(adaptMovieDataToClient(data))))
+    .catch((err) => dispatch(setFavoriteMovieStatusPostError(err)));
 };
 
 export const fetchCurrentMovieData = (id) => (dispatch, _getState, api) => {

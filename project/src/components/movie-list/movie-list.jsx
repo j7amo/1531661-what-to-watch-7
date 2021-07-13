@@ -1,38 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import MovieCard from '../movie-card/movie-card';
 import movieProp from '../film/film.prop.js';
 import { connect } from 'react-redux';
-import { getCurrentGenre } from "../../store/selectors";
+import { getCurrentGenre } from '../../store/selectors';
 
 const PREVIEW_DELAY = 1000;
 const MOVIE_RENDER_INITIAL_LIMIT = 8;
 const MOVIE_RENDER_STEP = 8;
 
 function MovieList({movies, currentGenre}) {
-  const [activeMovie, setActiveMovie] = useState(null);
+  const [activeMovieID, setActiveMovieID] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [renderedMoviesLimit, setRenderedMoviesLimit] = useState(MOVIE_RENDER_INITIAL_LIMIT);
+  const isInitialMount = useRef(true);
 
-  function handleMouseOver(movie) {
-    setActiveMovie(movie);
-  }
+  // function handleMouseOver(movie) {
+  //   setActiveMovie(movie);
+  // }
 
-  function handleMouseLeave() {
-    setActiveMovie(null);
-  }
+  const handleMouseOver = useCallback((movie) => {
+    setActiveMovieID(movie.id);
+  },[]);
+
+  // function handleMouseLeave() {
+  //   setActiveMovie(null);
+  // }
+
+  const handleMouseLeave = useCallback(() => {
+    setActiveMovieID(null);
+  },[]);
 
   function handleShowMoreClick() {
     setRenderedMoviesLimit(renderedMoviesLimit + MOVIE_RENDER_STEP);
   }
 
   useEffect(() => {
-    const timerID = setTimeout(() => setIsPlaying(true), PREVIEW_DELAY);
-    return () => {
-      setIsPlaying(false);
-      clearTimeout(timerID);
-    };
-  }, [activeMovie]);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else if (activeMovieID) {
+      const timerID = setTimeout(() => setIsPlaying(true), PREVIEW_DELAY);
+      return () => {
+        setIsPlaying(false);
+        clearTimeout(timerID);
+      };
+    }
+  }, [activeMovieID]);
 
   useEffect(() => {
     setRenderedMoviesLimit(MOVIE_RENDER_INITIAL_LIMIT);
@@ -43,10 +56,9 @@ function MovieList({movies, currentGenre}) {
       <div className="catalog__films-list">
         {movies.slice(0, renderedMoviesLimit).map((movie) => (
           <MovieCard
-            key={movie.name + movie.id}
-            movie={movie}
-            activeMovie={activeMovie}
-            isPlaying={isPlaying}
+            key={movie.id}
+            movieID={movie.id}
+            isPlaying={isPlaying && activeMovieID === movie.id}
             handleMouseOver={handleMouseOver}
             handleMouseLeave={handleMouseLeave}
           />
@@ -64,8 +76,8 @@ MovieList.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
-    )).isRequired,
-  currentGenre: PropTypes.string.isRequired,
+    )),
+  currentGenre: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch) => ({
 const ConnectedSignIn = connect(null, mapDispatchToProps)(SignIn);
 
 SignIn.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
 };
 
 export default ConnectedSignIn;

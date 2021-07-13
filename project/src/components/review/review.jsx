@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reviewProp from '../film/review.prop.js';
+import {getFormattedDate} from '../../utils';
 
 function Review({review}) {
   const {
@@ -17,7 +18,7 @@ function Review({review}) {
         <p className="review__text">{comment}</p>
         <footer className="review__details">
           <cite className="review__author">{name}</cite>
-          <time className="review__date" dateTime={date}>{date}</time>
+          <time className="review__date" dateTime={date}>{getFormattedDate(date)}</time>
         </footer>
       </blockquote>
 
@@ -27,7 +28,7 @@ function Review({review}) {
 }
 
 Review.propTypes = {
-  review: PropTypes.oneOfType([reviewProp]).isRequired,
+  review: PropTypes.oneOfType([reviewProp]),
 };
 
 export default Review;

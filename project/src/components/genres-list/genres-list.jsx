@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { setCurrentGenre } from '../../store/action.js';
 import PropTypes from 'prop-types';
-import { getCurrentGenre, getUniqueGenres } from "../../store/selectors";
+import { getCurrentGenre, getUniqueGenres } from '../../store/selectors';
 
 function GenresList(props) {
 
@@ -20,9 +20,9 @@ function GenresList(props) {
 }
 
 GenresList.propTypes = {
-  currentGenre: PropTypes.string.isRequired,
-  uniqueGenres: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onFilterClick: PropTypes.func.isRequired,
+  currentGenre: PropTypes.string,
+  uniqueGenres: PropTypes.arrayOf(PropTypes.string),
+  onFilterClick: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

@@ -25,7 +25,7 @@ function ToastMessage({message}) {
 }
 
 ToastMessage.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
 };
 
 export default ToastMessage;

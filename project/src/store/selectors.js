@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import {ALL_GENRES} from "../const";
+import { ALL_GENRES, GENRES_LIMIT } from '../const';
 
 export const getCurrentGenre = (state) => state.filters.currentGenre;
 
@@ -20,10 +20,36 @@ export const getMovies = (state) => state.movies.movies;
 
 export const getMoviesByGenre = createSelector(
   [getMovies, getCurrentGenre],
-  (movies, currentGenre) => movies.filter((movie) => currentGenre === ALL_GENRES || movie.genre === currentGenre)
+  (movies, currentGenre) => movies.filter((movie) => currentGenre === ALL_GENRES || movie.genre === currentGenre),
 );
 
 export const getUniqueGenres = createSelector(
   [getMovies],
-  (movies) => [ALL_GENRES, ...Array.from(new Set(movies.map((movie) => movie.genre)))]
+  (movies) => [ALL_GENRES, ...Array.from(new Set(movies.map((movie) => movie.genre))).slice(0, GENRES_LIMIT)],
 );
+
+export const getMovieByID = (state, id) => state.movies.movies.find((movie) => movie.id === id);
+
+export const getCurrentMovie = (state) => state.currentMovie.currentMovie;
+
+export const getCurrentMovieID = (state) => state.currentMovie.currentMovie.id;
+
+export const getCurrentMovieRequestStatus = (state) => state.currentMovie.currentMovieRequestStatus;
+
+export const getCurrentMovieRequestResult = (state) => state.currentMovie.currentMovieRequestResult;
+
+export const getCurrentSimilarMovies = (state) => state.currentMovie.currentSimilarMovies;
+
+export const getCurrentComments = (state) => state.currentMovie.currentComments;
+
+export const getAuthorizationStatus = (state) => state.authorizationStatus.status;
+
+export const getFavoriteMovies = (state) => state.favoriteMovies.favoriteMovies;
+
+export const getIsFavoriteMovie = (state, id) => {
+  if (state.favoriteMovies.favoriteMovies.find((movie) => movie.id === id)) {
+    return true;
+  }
+
+  return false;
+};

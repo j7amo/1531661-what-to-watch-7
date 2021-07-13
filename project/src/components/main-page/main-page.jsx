@@ -6,15 +6,19 @@ import UserBlock from '../user-block/user-block';
 import Footer from '../footer/footer';
 import { Link } from 'react-router-dom';
 import GenresList from '../genres-list/genres-list';
-import ConnectedMovieListByGenreContainer from "../movie-list-by-genre-container/movie-list-by-genre-container";
+import ConnectedMovieListByGenreContainer from '../movie-list-by-genre-container/movie-list-by-genre-container';
 import { connect } from 'react-redux';
 import {
+  getAuthorizationStatus,
+  getIsFavoriteMovie,
   getPromoMovieBackgroundImage,
   getPromoMovieGenre,
   getPromoMovieID,
   getPromoMovieName, getPromoMoviePosterImage,
   getPromoMovieReleasedDate
-} from "../../store/selectors";
+} from '../../store/selectors';
+import { postFavoriteMovieStatus } from '../../store/api-actions';
+import {AuthorizationStatus, FavoriteStatus} from '../../const';
 
 function MainPage(props) {
 
@@ -25,6 +29,9 @@ function MainPage(props) {
     released,
     backgroundImage,
     posterImage,
+    isFavorite,
+    onMyListClick,
+    authorizationStatus,
   } = props;
 
   return (
@@ -64,12 +71,19 @@ function MainPage(props) {
                     <span>Play</span>
                   </button>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"/>
-                  </svg>
+                {authorizationStatus === AuthorizationStatus.AUTH &&
+                <button className="btn btn--list film-card__button" type="button" onClick={() => onMyListClick(id, (isFavorite ? FavoriteStatus.REMOVED_FROM_FAVORITES : FavoriteStatus.ADDED_TO_FAVORITES))}>
+                  {isFavorite
+                    ?
+                    <svg viewBox="0 0 18 14" width="18" height="14">
+                      <use xlinkHref="#in-list"/>
+                    </svg>
+                    :
+                    <svg viewBox="0 0 19 20" width="19" height="20">
+                      <use xlinkHref="#add"/>
+                    </svg>}
                   <span>My list</span>
-                </button>
+                </button>}
               </div>
             </div>
           </div>
@@ -80,7 +94,7 @@ function MainPage(props) {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
           <GenresList />
-          <ConnectedMovieListByGenreContainer /*movies={getMoviesByGenre(movies, currentGenre)}*//>
+          <ConnectedMovieListByGenreContainer />
         </section>
         <Footer />
       </div>
@@ -89,12 +103,15 @@ function MainPage(props) {
 }
 
 MainPage.propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  genre: PropTypes.string.isRequired,
-  released: PropTypes.number.isRequired,
-  backgroundImage: PropTypes.string.isRequired,
-  posterImage: PropTypes.string.isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
+  genre: PropTypes.string,
+  released: PropTypes.number,
+  backgroundImage: PropTypes.string,
+  posterImage: PropTypes.string,
+  isFavorite: PropTypes.bool,
+  onMyListClick: PropTypes.func,
+  authorizationStatus: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
@@ -104,8 +121,16 @@ const mapStateToProps = (state) => ({
   released: getPromoMovieReleasedDate(state),
   backgroundImage: getPromoMovieBackgroundImage(state),
   posterImage: getPromoMoviePosterImage(state),
+  isFavorite: getIsFavoriteMovie(state, getPromoMovieID(state)),
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
-const ConnectedMainPage = connect(mapStateToProps)(MainPage);
+const mapDispatchToProps = (dispatch) => ({
+  onMyListClick(id, status) {
+    dispatch(postFavoriteMovieStatus(id, status));
+  },
+});
+
+const ConnectedMainPage = connect(mapStateToProps, mapDispatchToProps)(MainPage);
 
 export default memo(ConnectedMainPage);

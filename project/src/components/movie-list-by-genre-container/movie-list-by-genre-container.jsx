@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop.js';
 import { connect } from 'react-redux';
-import { getMoviesByGenre } from "../../store/selectors";
+import { getMoviesByGenre } from '../../store/selectors';
 import ConnectedMovieList from '../movie-list/movie-list.jsx';
 
 function MovieListByGenreContainer({moviesByGenre}) {
@@ -13,10 +13,10 @@ function MovieListByGenreContainer({moviesByGenre}) {
 }
 
 MovieListByGenreContainer.propTypes = {
-  movies: PropTypes.arrayOf(
+  moviesByGenre: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
-    )).isRequired,
+    )),
 };
 
 const mapStateToProps = (state) => ({

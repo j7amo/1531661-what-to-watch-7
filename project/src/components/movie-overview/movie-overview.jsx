@@ -1,26 +1,26 @@
 import React from 'react';
-import { MovieRating } from '../../const.js';
+import {MovieRating, MovieRatingLimits} from '../../const.js';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop';
 
 function getMovieRatingLevel(movie) {
   const rating = movie.rating;
-  switch (rating) {
-    case rating >= 0 && rating < 3:
-      return MovieRating.BAD;
-    case rating >= 3 && rating < 5:
-      return MovieRating.NORMAL;
-    case rating >= 5 && rating < 8:
-      return MovieRating.GOOD;
-    case rating >= 8 && rating < 10:
-      return MovieRating.VERY_GOOD;
-    case rating === 10:
-      return MovieRating.AWESOME;
+
+  if (rating >= MovieRatingLimits.BAD_LOWER_LIMIT && rating < MovieRatingLimits.BAD_UPPER_LIMIT) {
+    return MovieRating.BAD;
+  } else if (rating >= MovieRatingLimits.NORMAL_LOWER_LIMIT && rating < MovieRatingLimits.NORMAL_UPPER_LIMIT) {
+    return MovieRating.NORMAL;
+  } else if (rating >= MovieRatingLimits.GOOD_LOWER_LIMIT && rating < MovieRatingLimits.GOOD_UPPER_LIMIT) {
+    return MovieRating.GOOD;
+  } else if (rating >= MovieRatingLimits.VERY_GOOD_LOWER_LIMIT && rating < MovieRatingLimits.VERY_GOOD_UPPER_LIMIT) {
+    return MovieRating.VERY_GOOD;
+  } else if (rating === MovieRatingLimits.AWESOME_LOWER_LIMIT) {
+    return MovieRating.AWESOME;
   }
 }
 
 function MovieOverview({movie}) {
-  //debugger;
+
   const {
     rating,
     scoresCount,
@@ -55,7 +55,7 @@ function MovieOverview({movie}) {
 }
 
 MovieOverview.propTypes = {
-  movie: PropTypes.oneOfType([movieProp]).isRequired,
+  movie: PropTypes.oneOfType([movieProp]),
 };
 
 export default MovieOverview;

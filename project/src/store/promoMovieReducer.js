@@ -1,6 +1,5 @@
 import { ActionType } from './action.js';
 import { RequestResult, RequestStatus } from '../const.js';
-import { adaptMovieDataToClient } from './api-actions.js';
 
 const initialState = {
   requestStatus: RequestStatus.IDLE,

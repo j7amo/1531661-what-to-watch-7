@@ -89,8 +89,8 @@ Player.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
-    )).isRequired,
-  onExitClick: PropTypes.func.isRequired,
+    )),
+  onExitClick: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({

@@ -16,8 +16,27 @@ export const MovieRating = {
   AWESOME: 'Awesome',
 };
 
+export const MovieRatingLimits = {
+  BAD_LOWER_LIMIT: 0,
+  BAD_UPPER_LIMIT: 3,
+  NORMAL_LOWER_LIMIT: 3,
+  NORMAL_UPPER_LIMIT: 5,
+  GOOD_LOWER_LIMIT: 5,
+  GOOD_UPPER_LIMIT: 8,
+  VERY_GOOD_LOWER_LIMIT: 8,
+  VERY_GOOD_UPPER_LIMIT: 10,
+  AWESOME_LOWER_LIMIT: 10,
+};
+
 export const STARS_COUNT = 10;
 export const ALL_GENRES = 'All genres';
+export const GENRES_LIMIT = 9;
+export const MINUTES_IN_HOUR = 60;
+
+export const FavoriteStatus = {
+  ADDED_TO_FAVORITES: 1,
+  REMOVED_FROM_FAVORITES: 0,
+};
 
 export const RequestStatus = {
   IDLE: 'idle',

@@ -110,14 +110,14 @@ function AddReview({isLoading, onPageLeave, movies, error, onFormSubmitClick}) {
 }
 
 AddReview.propTypes = {
-  isLoading: PropTypes.string.isRequired,
+  isLoading: PropTypes.string,
   movies: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
-    )).isRequired,
-  error: PropTypes.oneOfType([null, string]).isRequired,
-  onFormSubmitClick: PropTypes.func.isRequired,
-  onPageLeave: PropTypes.func.isRequired,
+    )),
+  error: PropTypes.oneOfType([null, string]),
+  onFormSubmitClick: PropTypes.func,
+  onPageLeave: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
