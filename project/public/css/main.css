@@ -1336,6 +1336,10 @@ main {
   text-decoration: none;
   color: inherit; }
 
+span {
+  white-space: pre-wrap;
+}
+
 .user-block {
   display: flex;
   align-items: center;

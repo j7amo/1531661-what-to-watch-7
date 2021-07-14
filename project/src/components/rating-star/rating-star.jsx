@@ -13,9 +13,9 @@ function RatingStar({index, isChecked, isDisabled}) {
 }
 
 RatingStar.propTypes = {
-  index: PropTypes.number.isRequired,
-  isChecked: PropTypes.bool.isRequired,
-  isDisabled: PropTypes.bool.isRequired,
+  index: PropTypes.number,
+  isChecked: PropTypes.bool,
+  isDisabled: PropTypes.bool,
 };
 
 export default RatingStar;

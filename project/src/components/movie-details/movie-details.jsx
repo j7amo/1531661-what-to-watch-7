@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop';
+import {getFormattedMovieRuntime} from '../../utils';
 
 function MovieDetails({movie}) {
   const {
@@ -19,14 +20,14 @@ function MovieDetails({movie}) {
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Starring</strong>
-          <span className="film-card__details-value">{starring.join('\n')}</span>
+          <span className="film-card__details-value">{starring.join(', ')}</span>
         </p>
       </div>
 
       <div className="film-card__text-col">
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Run Time</strong>
-          <span className="film-card__details-value">{runTime}</span>
+          <span className="film-card__details-value">{getFormattedMovieRuntime(runTime)}</span>
         </p>
         <p className="film-card__details-item">
           <strong className="film-card__details-name">Genre</strong>
@@ -42,7 +43,7 @@ function MovieDetails({movie}) {
 }
 
 MovieDetails.propTypes = {
-  movie: PropTypes.oneOfType([movieProp]).isRequired,
+  movie: PropTypes.oneOfType([movieProp]),
 };
 
 export default MovieDetails;

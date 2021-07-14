@@ -5,6 +5,8 @@ import MovieReviews from '../movie-reviews/movie-reviews';
 import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop';
 import reviewProp from '../film/review.prop';
+import { getCurrentComments, getCurrentMovie } from '../../store/selectors';
+import { connect } from 'react-redux';
 
 const MovieTab = {
   OVERVIEW: 'Overview',
@@ -24,7 +26,7 @@ function getComponentByCurrentTab(tab, movie, reviews) {
 }
 
 
-function MovieTabs({movie, reviews}) {
+function MovieTabs({currentMovie, currentComments}) {
   const [currentTab, setCurrentTab] = useState(MovieTab.OVERVIEW);
 
   function handleTabClick(evt) {
@@ -59,17 +61,24 @@ function MovieTabs({movie, reviews}) {
           </li>
         </ul>
       </nav>
-      {getComponentByCurrentTab(currentTab, movie, reviews)}
+      {getComponentByCurrentTab(currentTab, currentMovie, currentComments)}
     </div>
   );
 }
 
 MovieTabs.propTypes = {
-  movie: PropTypes.oneOfType([movieProp]).isRequired,
-  reviews: PropTypes.arrayOf(
+  currentMovie: PropTypes.oneOfType([movieProp]).isRequired,
+  currentComments: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [reviewProp],
-    )).isRequired,
+    )),
 };
 
-export default MovieTabs;
+const mapStateToProps = (state) => ({
+  currentMovie: getCurrentMovie(state),
+  currentComments: getCurrentComments(state),
+});
+
+const ConnectedMovieTabs = connect(mapStateToProps)(MovieTabs);
+
+export default ConnectedMovieTabs;

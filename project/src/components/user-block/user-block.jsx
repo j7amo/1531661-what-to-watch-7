@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import { Link } from 'react-router-dom';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,10 +7,10 @@ import {signOut} from '../../store/api-actions.js';
 
 function UserBlock({authorizationStatus, onSignOutClick}) {
 
-  const handleOnClick = (evt) => {
+  const handleOnClick = useCallback((evt) => {
     evt.preventDefault();
     onSignOutClick();
-  };
+  },[]);
 
   if(authorizationStatus !== AuthorizationStatus.AUTH) {
     return (
@@ -53,8 +53,8 @@ const mapDispatchToProps = (dispatch) => ({
 const ConnectedUserBlock = connect(mapStateToProps, mapDispatchToProps)(UserBlock);
 
 UserBlock.propTypes = {
-  authorizationStatus: PropTypes.string.isRequired,
-  onSignOutClick: PropTypes.func.isRequired,
+  authorizationStatus: PropTypes.string,
+  onSignOutClick: PropTypes.func,
 };
 
 export default ConnectedUserBlock;

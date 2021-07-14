@@ -6,14 +6,22 @@ import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
-import MovieTabs from '../movie-tabs/movie-tabs';
 import { connect } from 'react-redux';
-import { AuthorizationStatus, RequestResult, RequestStatus } from '../../const';
+import {AuthorizationStatus, FavoriteStatus, RequestResult, RequestStatus} from '../../const';
 import LoadingScreen from '../loading-screen/loading-screen';
 import NoSuchPage from '../no-such-page/no-such-page';
 import movieProp from '../film/film.prop.js';
-import commentProp from '../film/film.prop.js';
-import { fetchCurrentMovieData } from '../../store/api-actions';
+import {fetchCurrentMovieData, postFavoriteMovieStatus} from '../../store/api-actions';
+import {
+  getAuthorizationStatus,
+  getCurrentMovie,
+  getCurrentMovieID,
+  getCurrentMovieRequestResult,
+  getCurrentMovieRequestStatus,
+  getCurrentSimilarMovies,
+  getIsFavoriteMovie
+} from '../../store/selectors';
+import ConnectedMovieTabs from '../movie-tabs/movie-tabs';
 
 function Film(props) {
 
@@ -22,9 +30,10 @@ function Film(props) {
     loadingResult,
     currentMovie,
     currentSimilarMovies,
-    currentComments,
     authorizationStatus,
+    isFavorite,
     onFilmComponentLayoutRendered,
+    onMyListClick,
   } = props;
 
   const { id } = useParams();
@@ -89,14 +98,22 @@ function Film(props) {
                     <span>Play</span>
                   </button>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"/>
-                  </svg>
-                  <span>My list</span>
-                </button>
-                {authorizationStatus === AuthorizationStatus.AUTH
-                && <Link to={`/films/${id}/review`} className="btn film-card__button">Add review</Link>}
+                {authorizationStatus === AuthorizationStatus.AUTH &&
+                <>
+                  <button className="btn btn--list film-card__button" type="button" onClick={() => onMyListClick(id, (isFavorite ? FavoriteStatus.REMOVED_FROM_FAVORITES : FavoriteStatus.ADDED_TO_FAVORITES))}>
+                    {isFavorite
+                      ?
+                      <svg viewBox="0 0 18 14" width="18" height="14">
+                        <use xlinkHref="#in-list"/>
+                      </svg>
+                      :
+                      <svg viewBox="0 0 19 20" width="19" height="20">
+                        <use xlinkHref="#add"/>
+                      </svg>}
+                    <span>My list</span>
+                  </button>
+                  <Link to={`/films/${id}/review`} className="btn film-card__button">Add review</Link>
+                </>}
               </div>
             </div>
           </div>
@@ -108,7 +125,7 @@ function Film(props) {
               <img src={posterImage} alt={`${name} poster`} width="218" height="327"/>
             </div>
 
-            <MovieTabs movie={currentMovie} reviews={currentComments}/>
+            <ConnectedMovieTabs />
           </div>
         </div>
       </section>
@@ -126,27 +143,31 @@ function Film(props) {
 }
 
 Film.propTypes = {
-  isLoading: PropTypes.string.isRequired,
-  loadingResult: PropTypes.string.isRequired,
+  isLoading: PropTypes.string,
+  loadingResult: PropTypes.string,
   currentMovie: PropTypes.oneOfType([movieProp]),
-  currentSimilarMovies: PropTypes.arrayOf(PropTypes.oneOfType([movieProp])).isRequired,
-  currentComments: PropTypes.arrayOf(PropTypes.oneOfType([commentProp])).isRequired,
-  authorizationStatus: PropTypes.string.isRequired,
-  onFilmComponentLayoutRendered: PropTypes.func.isRequired,
+  currentSimilarMovies: PropTypes.arrayOf(PropTypes.oneOfType([movieProp])),
+  authorizationStatus: PropTypes.string,
+  isFavorite: PropTypes.bool,
+  onFilmComponentLayoutRendered: PropTypes.func,
+  onMyListClick: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
-  isLoading: state.currentMovie.currentMovieRequestStatus,
-  loadingResult: state.currentMovie.currentMovieRequestResult,
-  currentMovie: state.currentMovie.currentMovie,
-  currentSimilarMovies: state.currentMovie.currentSimilarMovies,
-  currentComments: state.currentMovie.currentComments,
-  authorizationStatus: state.authorizationStatus.status,
+  isLoading: getCurrentMovieRequestStatus(state),
+  loadingResult: getCurrentMovieRequestResult(state),
+  currentMovie: getCurrentMovie(state),
+  currentSimilarMovies: getCurrentSimilarMovies(state),
+  authorizationStatus: getAuthorizationStatus(state),
+  isFavorite: getIsFavoriteMovie(state, getCurrentMovieID(state)),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onFilmComponentLayoutRendered(id) {
     dispatch(fetchCurrentMovieData(id));
+  },
+  onMyListClick(id, status) {
+    dispatch(postFavoriteMovieStatus(id, status));
   },
 });
 

@@ -19,7 +19,7 @@ function NoSuchPage({onMainClick}) {
 }
 
 NoSuchPage.propTypes = {
-  onMainClick: PropTypes.func.isRequired,
+  onMainClick: PropTypes.func,
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -7,14 +7,9 @@ import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import movieProp from '../film/film.prop.js';
 import { connect } from 'react-redux';
+import { getFavoriteMovies } from '../../store/selectors';
 
-const mapStateToProps = (state) => ({
-  movies: state.movies,
-});
-
-const ConnectedMyList = connect(mapStateToProps)(MyList);
-
-function MyList({movies}) {
+function MyList({favoriteMovies}) {
 
   return (
     <React.Fragment>
@@ -28,7 +23,7 @@ function MyList({movies}) {
 
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
-          <MovieList movies={movies.filter((movie) => movie.isFavorite)} />
+          <MovieList movies={favoriteMovies} />
         </section>
 
         <Footer />
@@ -38,10 +33,16 @@ function MyList({movies}) {
 }
 
 MyList.propTypes = {
-  movies: PropTypes.arrayOf(
+  favoriteMovies: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [movieProp],
-    )).isRequired,
+    )),
 };
+
+const mapStateToProps = (state) => ({
+  favoriteMovies: getFavoriteMovies(state),
+});
+
+const ConnectedMyList = connect(mapStateToProps)(MyList);
 
 export default ConnectedMyList;

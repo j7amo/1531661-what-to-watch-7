@@ -23,7 +23,7 @@ MovieReviews.propTypes = {
   reviews: PropTypes.arrayOf(
     PropTypes.oneOfType(
       [reviewProp],
-    )).isRequired,
+    )),
 };
 
 export default MovieReviews;

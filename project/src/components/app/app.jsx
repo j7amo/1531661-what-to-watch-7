@@ -54,7 +54,7 @@ function App({isLoading}) {
 }
 
 App.propTypes = {
-  isLoading: PropTypes.string.isRequired,
+  isLoading: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

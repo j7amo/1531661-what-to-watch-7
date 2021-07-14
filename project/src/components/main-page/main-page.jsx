@@ -1,25 +1,27 @@
-import React from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
-import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
-import movieProp from '../film/film.prop.js';
 import { Link } from 'react-router-dom';
 import GenresList from '../genres-list/genres-list';
-import {connect} from 'react-redux';
-import { ALL_GENRES } from '../../const';
+import ConnectedMovieListByGenreContainer from '../movie-list-by-genre-container/movie-list-by-genre-container';
+import { connect } from 'react-redux';
+import {
+  getAuthorizationStatus,
+  getIsFavoriteMovie,
+  getPromoMovieBackgroundImage,
+  getPromoMovieGenre,
+  getPromoMovieID,
+  getPromoMovieName, getPromoMoviePosterImage,
+  getPromoMovieReleasedDate
+} from '../../store/selectors';
+import {fetchFavoriteMoviesData, postFavoriteMovieStatus} from '../../store/api-actions';
+import {AuthorizationStatus, FavoriteStatus} from '../../const';
 
-function getMoviesByGenre(movies, genre) {
-  if (genre === ALL_GENRES) {
-    return movies;
-  }
+function MainPage(props) {
 
-  return movies.filter((movie) => movie.genre === genre);
-}
-
-function MainPage({movies, currentGenre}) {
   const {
     id,
     name,
@@ -27,7 +29,17 @@ function MainPage({movies, currentGenre}) {
     released,
     backgroundImage,
     posterImage,
-  } = movies[19];
+    isFavorite,
+    onMyListClick,
+    authorizationStatus,
+    onMainPageComponentLayoutRendered,
+  } = props;
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      onMainPageComponentLayoutRendered();
+    }
+  },[authorizationStatus]);
 
   return (
     <React.Fragment>
@@ -66,12 +78,19 @@ function MainPage({movies, currentGenre}) {
                     <span>Play</span>
                   </button>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"/>
-                  </svg>
+                {authorizationStatus === AuthorizationStatus.AUTH &&
+                <button className="btn btn--list film-card__button" type="button" onClick={() => onMyListClick(id, (isFavorite ? FavoriteStatus.REMOVED_FROM_FAVORITES : FavoriteStatus.ADDED_TO_FAVORITES))}>
+                  {isFavorite
+                    ?
+                    <svg viewBox="0 0 18 14" width="18" height="14">
+                      <use xlinkHref="#in-list"/>
+                    </svg>
+                    :
+                    <svg viewBox="0 0 19 20" width="19" height="20">
+                      <use xlinkHref="#add"/>
+                    </svg>}
                   <span>My list</span>
-                </button>
+                </button>}
               </div>
             </div>
           </div>
@@ -82,7 +101,7 @@ function MainPage({movies, currentGenre}) {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
           <GenresList />
-          <MovieList movies={getMoviesByGenre(movies, currentGenre)}/>
+          <ConnectedMovieListByGenreContainer />
         </section>
         <Footer />
       </div>
@@ -91,18 +110,38 @@ function MainPage({movies, currentGenre}) {
 }
 
 MainPage.propTypes = {
-  currentGenre: PropTypes.string.isRequired,
-  movies: PropTypes.arrayOf(
-    PropTypes.oneOfType(
-      [movieProp],
-    )).isRequired,
+  id: PropTypes.number,
+  name: PropTypes.string,
+  genre: PropTypes.string,
+  released: PropTypes.number,
+  backgroundImage: PropTypes.string,
+  posterImage: PropTypes.string,
+  isFavorite: PropTypes.bool,
+  onMyListClick: PropTypes.func,
+  authorizationStatus: PropTypes.string,
+  onMainPageComponentLayoutRendered: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
-  currentGenre: state.filters.currentGenre,
-  movies: state.movies.movies,
+  id: getPromoMovieID(state),
+  name: getPromoMovieName(state),
+  genre: getPromoMovieGenre(state),
+  released: getPromoMovieReleasedDate(state),
+  backgroundImage: getPromoMovieBackgroundImage(state),
+  posterImage: getPromoMoviePosterImage(state),
+  isFavorite: getIsFavoriteMovie(state, getPromoMovieID(state)),
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
-const ConnectedMainPage = connect(mapStateToProps)(MainPage);
+const mapDispatchToProps = (dispatch) => ({
+  onMyListClick(id, status) {
+    dispatch(postFavoriteMovieStatus(id, status));
+  },
+  onMainPageComponentLayoutRendered() {
+    dispatch(fetchFavoriteMoviesData());
+  },
+});
 
-export default ConnectedMainPage;
+const ConnectedMainPage = connect(mapStateToProps, mapDispatchToProps)(MainPage);
+
+export default memo(ConnectedMainPage);
