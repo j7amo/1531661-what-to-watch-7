@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
@@ -17,7 +17,7 @@ import {
   getPromoMovieName, getPromoMoviePosterImage,
   getPromoMovieReleasedDate
 } from '../../store/selectors';
-import { postFavoriteMovieStatus } from '../../store/api-actions';
+import {fetchFavoriteMoviesData, postFavoriteMovieStatus} from '../../store/api-actions';
 import {AuthorizationStatus, FavoriteStatus} from '../../const';
 
 function MainPage(props) {
@@ -32,7 +32,14 @@ function MainPage(props) {
     isFavorite,
     onMyListClick,
     authorizationStatus,
+    onMainPageComponentLayoutRendered,
   } = props;
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.AUTH) {
+      onMainPageComponentLayoutRendered();
+    }
+  },[authorizationStatus]);
 
   return (
     <React.Fragment>
@@ -112,6 +119,7 @@ MainPage.propTypes = {
   isFavorite: PropTypes.bool,
   onMyListClick: PropTypes.func,
   authorizationStatus: PropTypes.string,
+  onMainPageComponentLayoutRendered: PropTypes.func,
 };
 
 const mapStateToProps = (state) => ({
@@ -128,6 +136,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onMyListClick(id, status) {
     dispatch(postFavoriteMovieStatus(id, status));
+  },
+  onMainPageComponentLayoutRendered() {
+    dispatch(fetchFavoriteMoviesData());
   },
 });
 
