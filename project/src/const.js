@@ -32,6 +32,8 @@ export const STARS_COUNT = 10;
 export const ALL_GENRES = 'All genres';
 export const GENRES_LIMIT = 9;
 export const MINUTES_IN_HOUR = 60;
+export const SECONDS_IN_MINUTE = 60;
+export const SECONDS_IN_HOUR = 3600;
 
 export const FavoriteStatus = {
   ADDED_TO_FAVORITES: 1,
