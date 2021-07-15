@@ -5,11 +5,12 @@ import PropTypes from 'prop-types';
 import movieProp from '../film/film.prop.js';
 import { connect } from 'react-redux';
 import { SECONDS_IN_HOUR, SECONDS_IN_MINUTE } from '../../const';
-import LoadingScreen from "../loading-screen/loading-screen";
+import LoadingScreen from '../loading-screen/loading-screen';
 
 const MAX_PROGRESS_BAR_VALUE = 100;
 const TIME_LOWER_LIMIT = 0;
 const TIME_UPPER_LIMIT = 10;
+const VIDEO_READY_STATE = 3;
 
 const toggleFullScreen = (element) => {
   if (!element.fullscreenElement) {
@@ -83,11 +84,14 @@ function Player({movies, onExitClick}) {
     if (currentProgress === MAX_PROGRESS_BAR_VALUE) {
       setIsPlaying(false);
     }
-  }
+  };
 
   useEffect(() => {
-    videoRef.current.onloadeddata = setIsLoading(false);
-    console.log('video loaded');
+    videoRef.current.onloadeddata = () => {
+      if(videoRef.current.readyState >= VIDEO_READY_STATE) {
+        setIsLoading(false);
+      }
+    };
     videoRef.current.onplay = setIsPlaying(true);
     videoRef.current.onpause = setIsPlaying(false);
 
@@ -119,7 +123,7 @@ function Player({movies, onExitClick}) {
         <video ref={videoRef} src={videoLink} className="player__video" poster={previewImage} onTimeUpdate={handlePlayTimeUpdate}/>
 
         <button type="button" className="player__exit" onClick={onExitButtonClick}>Exit</button>
-        {isLoading && <p>ПРИВЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕТ!!!!!!!!!!</p>}
+        {isLoading && <LoadingScreen/>}
         <div className="player__controls">
           <div className="player__controls-row">
             <div className="player__time">
