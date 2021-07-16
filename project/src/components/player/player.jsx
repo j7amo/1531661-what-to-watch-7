@@ -14,17 +14,22 @@ const VIDEO_READY_STATE = 3;
 
 const toggleFullScreen = (element) => {
   if (!element.fullscreenElement) {
-    element.requestFullscreen();
-    element.fullscreenElement = true;
-  } else if(document.exitFullscreen) {
-    document.exitFullscreen();
-    element.fullscreenElement = false;
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+      element.fullscreenElement = true;
+    } else if (element.webkitRequestFullScreen) {
+      element.webkitRequestFullScreen();
+      element.fullscreenElement = true;
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+      element.fullscreenElement = false;
+    } else if (document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+      element.fullscreenElement = false;
+    }
   }
-  // else if(document.mozCancelFullScreen) {
-  //     document.mozCancelFullScreen();
-  //   } else if(document.webkitExitFullscreen) {
-  //     document.webkitExitFullscreen();
-  //   }
 };
 
 const getFormattedTime = (time) => {
@@ -120,7 +125,7 @@ function Player({movies, onExitClick}) {
     <React.Fragment>
       <SvgInjector />
       <div className="player" ref={containerRef}>
-        <video ref={videoRef} src={videoLink} className="player__video" poster={previewImage} onTimeUpdate={handlePlayTimeUpdate}/>
+        <video ref={videoRef} src={videoLink} className="player__video" poster={previewImage} onTimeUpdate={handlePlayTimeUpdate} autoPlay/>
 
         <button type="button" className="player__exit" onClick={onExitButtonClick}>Exit</button>
         {isLoading && <LoadingScreen/>}
