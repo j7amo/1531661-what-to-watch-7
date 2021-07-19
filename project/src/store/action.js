@@ -77,10 +77,10 @@ export function beginFavoriteMovieStatusPost() {
   };
 }
 
-export function setFavoriteMovieStatusPostData(movies) {
+export function setFavoriteMovieStatusPostData(movie) {
   return {
     type: ActionType.SET_FAVORITE_MOVIE_STATUS_POST_DATA,
-    payload: movies,
+    payload: movie,
   };
 }
 

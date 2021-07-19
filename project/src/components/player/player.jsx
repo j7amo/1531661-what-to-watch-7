@@ -130,7 +130,6 @@ function Player({movies, onExitClick}) {
     let timeOut;
 
     if (isFullScreen) {
-    console.log('inside controls effect');
       window.onmousemove = () => {
         setIsControlsVisible(true);
         clearTimeout(timeOut);
