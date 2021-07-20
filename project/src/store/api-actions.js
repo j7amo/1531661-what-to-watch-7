@@ -52,35 +52,35 @@ export const adaptMovieDataToClient = (dataFromServer) => {
 
 export const fetchMoviesData = () => (dispatch, _getState, api) => {
   dispatch(beginMoviesDataFetch());
-  api.get(APIRoute.FILMS)
+  return api.get(APIRoute.FILMS)
     .then(({data}) => dispatch(setMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))))
     .catch((err) => dispatch(setMoviesError(err.message)));
 };
 
 export const fetchPromoMovieData = () => (dispatch, _getState, api) => {
   dispatch(beginPromoMovieDataFetch());
-  api.get(APIRoute.PROMO)
+  return api.get(APIRoute.PROMO)
     .then(({data}) => dispatch(setPromoMovieData(adaptMovieDataToClient(data))))
     .catch((err) => dispatch(setPromoMovieError(err)));
 };
 
 export const fetchFavoriteMoviesData = () => (dispatch, _getState, api) => {
   dispatch(beginFavoriteMoviesDataFetch());
-  api.get(APIRoute.FAVORITE)
+  return api.get(APIRoute.FAVORITE)
     .then(({data}) => dispatch(setFavoriteMoviesData(data.map((movie) => adaptMovieDataToClient(movie)))))
     .catch((err) => dispatch(setFavoriteMoviesError(err)));
 };
 
 export const postFavoriteMovieStatus = (id, status) => (dispatch, _getState, api) => {
   dispatch(beginFavoriteMovieStatusPost());
-  api.post(`${APIRoute.FAVORITE}/${id}/${status}`)
+  return api.post(`${APIRoute.FAVORITE}/${id}/${status}`)
     .then(({data}) => dispatch(setFavoriteMovieStatusPostData(adaptMovieDataToClient(data))))
     .catch((err) => dispatch(setFavoriteMovieStatusPostError(err)));
 };
 
 export const fetchCurrentMovieData = (id) => (dispatch, _getState, api) => {
   dispatch(beginCurrentMovieDataFetch());
-  Promise.all([
+  return Promise.all([
     api.get(`${APIRoute.FILMS}/${id}`).then(({data}) => data),
     api.get(`${APIRoute.FILMS}/${id}/similar`).then(({data}) => data),
     api.get(`${APIRoute.COMMENTS}/${id}`).then(({data}) => data),
@@ -88,29 +88,29 @@ export const fetchCurrentMovieData = (id) => (dispatch, _getState, api) => {
     .catch((err) => dispatch(setCurrentMovieError(err.message)));
 };
 
-export const checkAuthorization = () => (dispatch, _getState, api) => {
+export const checkAuthorization = () => (dispatch, _getState, api) => (
   api.get(APIRoute.SIGN_IN)
     .then(() => dispatch(setAuthorizationStatus(AuthorizationStatus.AUTH)))
-    .catch(() => {});
-};
+    .catch(() => {})
+);
 
-export const signIn = (credentials) => (dispatch, _getState, api) => {
-  api.post(APIRoute.SIGN_IN, credentials)
+export const signIn = ({email, password}) => (dispatch, _getState, api) => (
+  api.post(APIRoute.SIGN_IN, {email, password})
     .then(({data}) => localStorage.setItem('token', data.token))
     .then(() => dispatch(setAuthorizationStatus(AuthorizationStatus.AUTH)))
-    .then(() => dispatch(redirectToRoute(AppRoute.MAIN)));
-};
+    .then(() => dispatch(redirectToRoute(AppRoute.MAIN)))
+);
 
-export const signOut = () => (dispatch, _getState, api) => {
+export const signOut = () => (dispatch, _getState, api) => (
   api.delete(APIRoute.SIGN_OUT)
     .then(() => localStorage.removeItem('token'))
     .then(() => dispatch(setAuthorizationStatus(AuthorizationStatus.NO_AUTH)))
-    .then(() => dispatch(redirectToRoute(AppRoute.MAIN)));
-};
+    .then(() => dispatch(redirectToRoute(AppRoute.MAIN)))
+);
 
 export const postComment = ({id, rating, comment}) => (dispatch, _getState, api) => {
   dispatch(beginCommentPost());
-  api.post(`${APIRoute.COMMENTS}/${id}`, {rating, comment})
+  return api.post(`${APIRoute.COMMENTS}/${id}`, {rating, comment})
     .then(({data}) => dispatch(setCommentPostData(data)))
     .then(() => dispatch(redirectToRoute(`${AppRoute.FILMS}/${id}`)))
     .catch((err) => dispatch(setCommentPostError(err)));
