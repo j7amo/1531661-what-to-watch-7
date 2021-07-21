@@ -15,17 +15,9 @@ function MovieList({movies, currentGenre}) {
   const [renderedMoviesLimit, setRenderedMoviesLimit] = useState(MOVIE_RENDER_INITIAL_LIMIT);
   const isInitialMount = useRef(true);
 
-  // function handleMouseOver(movie) {
-  //   setActiveMovie(movie);
-  // }
-
   const handleMouseOver = useCallback((movie) => {
     setActiveMovieID(movie.id);
   },[]);
-
-  // function handleMouseLeave() {
-  //   setActiveMovie(null);
-  // }
 
   const handleMouseLeave = useCallback(() => {
     setActiveMovieID(null);
@@ -53,7 +45,7 @@ function MovieList({movies, currentGenre}) {
 
   return (
     <>
-      <div className="catalog__films-list">
+      <div className="catalog__films-list" data-testid="movie-list-catalog">
         {movies.slice(0, renderedMoviesLimit).map((movie) => (
           <MovieCard
             key={movie.id}

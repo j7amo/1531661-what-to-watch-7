@@ -12,6 +12,7 @@ function Review({review}) {
     },
     date,
   } = review;
+
   return (
     <div className="review">
       <blockquote className="review__quote">

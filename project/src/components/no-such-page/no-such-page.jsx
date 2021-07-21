@@ -7,14 +7,14 @@ import PropTypes from 'prop-types';
 function NoSuchPage({onMainClick}) {
 
   return (
-    <p>
-      <p>
-        404 Page Not Found
-      </p>
+    <>
+      <h1>
+        404. Page Not Found
+      </h1>
       <Link to='/' onClick={onMainClick}>
         Go to main page!
       </Link>
-    </p>
+    </>
   );
 }
 

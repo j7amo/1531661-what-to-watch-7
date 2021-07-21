@@ -11,7 +11,7 @@ function MovieCard(props) {
   const { name, previewImage, previewVideoLink } = movieByID;
 
   return (
-    <article className="small-film-card catalog__films-card" onMouseOver={() => handleMouseOver(movieByID)} onMouseLeave={() => handleMouseLeave()}>
+    <article className="small-film-card catalog__films-card" onMouseOver={() => handleMouseOver(movieByID)} onMouseLeave={() => handleMouseLeave()} data-testid="film-card-in-movie-list">
       {isPlaying
         ? <Link to={`/films/${movieID}`}><video src={previewVideoLink} width="280" height="175" muted autoPlay/></Link>
         :

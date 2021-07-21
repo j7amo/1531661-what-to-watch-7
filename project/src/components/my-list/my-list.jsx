@@ -21,7 +21,7 @@ function MyList({favoriteMovies}) {
           <UserBlock />
         </header>
 
-        <section className="catalog">
+        <section className="catalog" data-testid="movie-list">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
           <MovieList movies={favoriteMovies} />
         </section>
