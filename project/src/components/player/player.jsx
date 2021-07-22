@@ -71,12 +71,12 @@ function Player({movies, onExitClick}) {
         element.requestFullscreen();
         element.fullscreenElement = true;
         setIsFullScreen(true);
-        setIsControlsVisible(false)
+        setIsControlsVisible(false);
       } else if (element.webkitRequestFullScreen) {
         element.webkitRequestFullScreen();
         element.fullscreenElement = true;
         setIsFullScreen(true);
-        setIsControlsVisible(false)
+        setIsControlsVisible(false);
       }
     } else {
       if (document.exitFullscreen) {
@@ -133,8 +133,8 @@ function Player({movies, onExitClick}) {
       window.onmousemove = () => {
         setIsControlsVisible(true);
         clearTimeout(timeOut);
-        timeOut = setTimeout(() => setIsControlsVisible(false), CONTROLS_VISIBILITY_TIMEOUT)
-      }
+        timeOut = setTimeout(() => setIsControlsVisible(false), CONTROLS_VISIBILITY_TIMEOUT);
+      };
     }
 
     return () => {
@@ -167,7 +167,7 @@ function Player({movies, onExitClick}) {
           </div>
 
           <div className="player__controls-row">
-            <button type="button" className="player__play" disabled={isLoading} onClick={() => {setIsPlaying(!isPlaying);}}>
+            <button type="button" className="player__play" disabled={isLoading} onClick={() => {setIsPlaying(!isPlaying);}} data-testid="play-pause-button">
               {isPlaying
                 ?
                 <>

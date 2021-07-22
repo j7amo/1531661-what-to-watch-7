@@ -4,13 +4,12 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import ConnectedMyList from './my-list';
-import {AuthorizationStatus} from '../../const';
+import ConnectedGenresList from './genres-list';
 
 let history = null;
 let mockStore = null;
 
-describe('Components : ConnectedMyList', () => {
+describe('Components : ConnectedGenresList', () => {
   beforeEach(() => {
     history = createMemoryHistory();
     mockStore = configureStore({});
@@ -18,35 +17,25 @@ describe('Components : ConnectedMyList', () => {
 
   it('should render correctly', () => {
     const store = mockStore({
-      authorizationStatus: {
-        status: AuthorizationStatus.AUTH,
-      },
       filters: {
         currentGenre: 'Drama',
-      },
-      favoriteMovies: {
-        favoriteMovies: [
-          {
-            name: 'Movie1',
-          },
-          {
-            name: 'Movie2',
-          },
-          {
-            name: 'Movie3',
-          },
-        ],
       },
       movies: {
         movies: [
           {
+            id: 1,
             name: 'Movie1',
+            genre: 'Comedy',
           },
           {
+            id: 2,
             name: 'Movie2',
+            genre: 'Drama',
           },
           {
+            id: 3,
             name: 'Movie3',
+            genre: 'Action',
           },
         ],
       }
@@ -55,12 +44,11 @@ describe('Components : ConnectedMyList', () => {
     render(
       <Provider store={store}>
         <Router history={history}>
-          <ConnectedMyList />
+          <ConnectedGenresList />
         </Router>
       </Provider>,
     );
 
-    expect(screen.getByText(/My list/i)).toBeInTheDocument();
-    expect(screen.getByTestId(/movie-list-catalog/i)).toBeInTheDocument();
+    expect(screen.getAllByTestId(/unique-genre/i)).toHaveLength(4);
   });
 });

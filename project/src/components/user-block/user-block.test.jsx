@@ -4,8 +4,8 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { AuthorizationStatus } from "../../const";
-import ConnectedUserBlock from "./user-block";
+import { AuthorizationStatus } from '../../const';
+import ConnectedUserBlock from './user-block';
 
 let history = null;
 let mockStore = null;

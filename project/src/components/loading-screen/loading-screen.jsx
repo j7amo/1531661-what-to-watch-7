@@ -3,7 +3,7 @@ import './loading-screen.css';
 
 function LoadingScreen() {
   return (
-    <div className="lds-spinner">
+    <div className="lds-spinner" data-testid="loading-spinner">
       <div/>
       <div/>
       <div/>

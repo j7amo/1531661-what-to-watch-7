@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import RatingStars from "./rating-stars";
+import RatingStars from './rating-stars';
 
 describe('Components: RatingStars', () => {
   it('should render correctly', () => {
