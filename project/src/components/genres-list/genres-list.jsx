@@ -11,7 +11,7 @@ function GenresList(props) {
   return (
     <ul className="catalog__genres-list" onClick={onFilterClick}>
       {uniqueGenres.map((genre) => (
-        <li key={genre} className={`catalog__genres-item ${currentGenre === genre ? 'catalog__genres-item--active' : ''}`}>
+        <li key={genre} className={`catalog__genres-item ${currentGenre === genre ? 'catalog__genres-item--active' : ''}`} data-testid="unique-genre">
           <a href="#" className="catalog__genres-link">{genre}</a>
         </li>
       ))}

@@ -11,21 +11,7 @@ const MAX_PROGRESS_BAR_VALUE = 100;
 const TIME_LOWER_LIMIT = 0;
 const TIME_UPPER_LIMIT = 10;
 const VIDEO_READY_STATE = 3;
-
-const toggleFullScreen = (element) => {
-  if (!element.fullscreenElement) {
-    element.requestFullscreen();
-    element.fullscreenElement = true;
-  } else if(document.exitFullscreen) {
-    document.exitFullscreen();
-    element.fullscreenElement = false;
-  }
-  // else if(document.mozCancelFullScreen) {
-  //     document.mozCancelFullScreen();
-  //   } else if(document.webkitExitFullscreen) {
-  //     document.webkitExitFullscreen();
-  //   }
-};
+const CONTROLS_VISIBILITY_TIMEOUT = 2000;
 
 const getFormattedTime = (time) => {
 
@@ -60,7 +46,6 @@ const getFormattedTime = (time) => {
   return `- ${fullHours === TIME_LOWER_LIMIT ? '' : `${fullHoursFormatted}:`}${fullMinutesFormatted}:${fullSecondsFormatted}`;
 };
 
-
 function Player({movies, onExitClick}) {
 
   const { id } = useParams();
@@ -74,9 +59,39 @@ function Player({movies, onExitClick}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentProgress, setCurrentProgress] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(0);
+  const [isControlsVisible, setIsControlsVisible] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const videoRef = useRef(null);
   const containerRef = useRef(null);
+
+  const toggleFullScreen = (element) => {
+    if (!element.fullscreenElement) {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+        element.fullscreenElement = true;
+        setIsFullScreen(true);
+        setIsControlsVisible(false);
+      } else if (element.webkitRequestFullScreen) {
+        element.webkitRequestFullScreen();
+        element.fullscreenElement = true;
+        setIsFullScreen(true);
+        setIsControlsVisible(false);
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+        element.fullscreenElement = false;
+        setIsFullScreen(false);
+        setIsControlsVisible(true);
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+        element.fullscreenElement = false;
+        setIsFullScreen(false);
+        setIsControlsVisible(true);
+      }
+    }
+  };
 
   const handlePlayTimeUpdate = (evt) => {
     setCurrentProgress(MAX_PROGRESS_BAR_VALUE * evt.target.currentTime / evt.target.duration);
@@ -111,6 +126,23 @@ function Player({movies, onExitClick}) {
     videoRef.current.pause();
   },[isPlaying]);
 
+  useEffect(() => {
+    let timeOut;
+
+    if (isFullScreen) {
+      window.onmousemove = () => {
+        setIsControlsVisible(true);
+        clearTimeout(timeOut);
+        timeOut = setTimeout(() => setIsControlsVisible(false), CONTROLS_VISIBILITY_TIMEOUT);
+      };
+    }
+
+    return () => {
+      window.onmousemove = null;
+      clearTimeout(timeOut);
+    };
+  },[isFullScreen]);
+
   function onExitButtonClick() {
     setIsPlaying(false);
     onExitClick();
@@ -120,10 +152,11 @@ function Player({movies, onExitClick}) {
     <React.Fragment>
       <SvgInjector />
       <div className="player" ref={containerRef}>
-        <video ref={videoRef} src={videoLink} className="player__video" poster={previewImage} onTimeUpdate={handlePlayTimeUpdate}/>
+        <video ref={videoRef} src={videoLink} className="player__video" poster={previewImage} onTimeUpdate={handlePlayTimeUpdate} autoPlay/>
 
-        <button type="button" className="player__exit" onClick={onExitButtonClick}>Exit</button>
+        {isControlsVisible && <button type="button" className="player__exit" onClick={onExitButtonClick}>Exit</button>}
         {isLoading && <LoadingScreen/>}
+        {isControlsVisible &&
         <div className="player__controls">
           <div className="player__controls-row">
             <div className="player__time">
@@ -134,7 +167,7 @@ function Player({movies, onExitClick}) {
           </div>
 
           <div className="player__controls-row">
-            <button type="button" className="player__play" disabled={isLoading} onClick={() => {setIsPlaying(!isPlaying);}}>
+            <button type="button" className="player__play" disabled={isLoading} onClick={() => {setIsPlaying(!isPlaying);}} data-testid="play-pause-button">
               {isPlaying
                 ?
                 <>
@@ -160,7 +193,7 @@ function Player({movies, onExitClick}) {
               <span>Full screen</span>
             </button>
           </div>
-        </div>
+        </div>}
       </div>
     </React.Fragment>
   );
