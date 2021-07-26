@@ -43,26 +43,6 @@ describe('Asynchronous actions', () => {
       });
   });
 
-  it('should make a correct API call to GET /films in unsuccessful API response case', () => {
-    const fetchMoviesDataLoader = fetchMoviesData();
-
-    apiMock
-      .onGet(APIRoute.FILMS)
-      .reply(500, {error: true});
-
-    return fetchMoviesDataLoader(dispatch, () => {}, api)
-      .catch(() => {
-        expect(dispatch).toHaveBeenCalledTimes(2);
-        expect(dispatch).toHaveBeenNthCalledWith(1, {
-          type: ActionType.BEGIN_MOVIES_DATA_FETCH,
-        });
-        expect(dispatch).toHaveBeenNthCalledWith(2, {
-          type: ActionType.SET_MOVIES_ERROR,
-          payload: {error: true},
-        });
-      });
-  });
-
   it('should make a correct API call to GET /promo in successful API response case', () => {
     const fetchPromoMovieDataLoader = fetchPromoMovieData();
 
@@ -83,26 +63,6 @@ describe('Asynchronous actions', () => {
       });
   });
 
-  // it('should make a correct API call to GET /promo in unsuccessful API response case', () => {
-  //   const fetchPromoMovieDataLoader = fetchPromoMovieData();
-  //
-  //   apiMock
-  //     .onGet(APIRoute.PROMO)
-  //     .reply(500, {error: true});
-  //
-  //   return fetchPromoMovieDataLoader(dispatch, () => {}, api)
-  //     .catch(() => {
-  //       expect(dispatch).toHaveBeenCalledTimes(2);
-  //       expect(dispatch).toHaveBeenNthCalledWith(1, {
-  //         type: ActionType.BEGIN_PROMO_MOVIE_DATA_FETCH,
-  //       });
-  //       expect(dispatch).toHaveBeenNthCalledWith(2, {
-  //         type: ActionType.SET_PROMO_MOVIE_ERROR,
-  //         payload: {error: true},
-  //       });
-  //     });
-  // });
-
   it('should make a correct API call to GET /favorite in successful API response case', () => {
     const fetchFavoriteMoviesDataLoader = fetchFavoriteMoviesData();
 
@@ -122,26 +82,6 @@ describe('Asynchronous actions', () => {
         });
       });
   });
-
-  // it('should make a correct API call to GET /favorite in unsuccessful API response case', () => {
-  //   const fetchFavoriteMoviesDataLoader = fetchFavoriteMoviesData();
-  //
-  //   apiMock
-  //     .onGet(APIRoute.FAVORITE)
-  //     .reply(500, {error: true});
-  //
-  //   return fetchFavoriteMoviesDataLoader(dispatch, () => {}, api)
-  //     .catch(() => {
-  //       expect(dispatch).toHaveBeenCalledTimes(2);
-  //       expect(dispatch).toHaveBeenNthCalledWith(1, {
-  //         type: ActionType.BEGIN_FAVORITE_MOVIES_DATA_FETCH,
-  //       });
-  //       expect(dispatch).toHaveBeenNthCalledWith(2, {
-  //         type: ActionType.SET_FAVORITE_MOVIES_ERROR,
-  //         payload: {error: true},
-  //       });
-  //     });
-  // });
 
   it('should make a correct API call to POST /favorite/:id/:status in successful API response case', () => {
     const fakeId = 12345;
@@ -164,28 +104,6 @@ describe('Asynchronous actions', () => {
         });
       });
   });
-
-  // it('should make a correct API call to POST /favorite/:id/:status in unsuccessful API response case', () => {
-  //   const fakeId = 12345;
-  //   const fakeStatus = 1;
-  //   const postFavoriteMovieStatusLoader = postFavoriteMovieStatus(fakeId, fakeStatus);
-  //
-  //   apiMock
-  //     .onPost(`${APIRoute.FAVORITE}/${fakeId}/${fakeStatus}`)
-  //     .reply(500, {error: true});
-  //
-  //   return postFavoriteMovieStatusLoader(dispatch, () => {}, api)
-  //     .catch(() => {
-  //       expect(dispatch).toHaveBeenCalledTimes(2);
-  //       expect(dispatch).toHaveBeenNthCalledWith(1, {
-  //         type: ActionType.BEGIN_FAVORITE_MOVIE_STATUS_POST,
-  //       });
-  //       expect(dispatch).toHaveBeenNthCalledWith(2, {
-  //         type: ActionType.SET_FAVORITE_MOVIE_STATUS_POST_ERROR,
-  //         payload: {fake: true},
-  //       });
-  //     });
-  // });
 
   it('should make a correct API calls to GET /films/:id , /films/:id/similar , /comments/:id in successful API response case', () => {
     const fakeId = 12345;
@@ -212,32 +130,6 @@ describe('Asynchronous actions', () => {
         });
       });
   });
-
-  // it('should make a correct API calls to GET /films/:id , /films/:id/similar , /comments/:id in unsuccessful API response case', () => {
-  //   const fakeId = 12345;
-  //   const fetchCurrentMovieDataLoader = fetchCurrentMovieData(fakeId);
-  //
-  //   apiMock
-  //     .onGet(`${APIRoute.FILMS}/${fakeId}`)
-  //     .reply(500, {error: true})
-  //     .onGet(`${APIRoute.FILMS}/${fakeId}/similar`)
-  //     .reply(500, {error: true})
-  //     .onGet(`${APIRoute.COMMENTS}/${fakeId}`)
-  //     .reply(500, {error: true});
-  //
-  //
-  //   return fetchCurrentMovieDataLoader(dispatch, () => {}, api)
-  //     .catch(() => {
-  //       expect(dispatch).toHaveBeenCalledTimes(2);
-  //       expect(dispatch).toHaveBeenNthCalledWith(1, {
-  //         type: ActionType.BEGIN_CURRENT_MOVIE_DATA_FETCH,
-  //       });
-  //       expect(dispatch).toHaveBeenNthCalledWith(2, {
-  //         type: ActionType.SET_CURRENT_MOVIE_ERROR,
-  //         payload: [{error: true}, {error: true}, {error: true}],
-  //       });
-  //     });
-  // });
 
   it('should make a correct API call to GET /login', () => {
     const checkAuthorizationLoader = checkAuthorization();
@@ -333,27 +225,4 @@ describe('Asynchronous actions', () => {
         });
       });
   });
-
-  // it('should make a correct API call to POST /comments/:id in unsuccessful API response case', () => {
-  //   const fakeID = 123;
-  //   const fakeRating = 1;
-  //   const fakeComment = 'Hello world';
-  //   const postCommentLoader = postComment({id: fakeID, rating: fakeRating, comment: fakeComment});
-  //
-  //   apiMock
-  //     .onPost(`${APIRoute.COMMENTS}/${fakeID}`)
-  //     .reply(500, {error: true});
-  //
-  //   return postCommentLoader(dispatch, () => {}, api)
-  //     .catch(() => {
-  //       expect(dispatch).toHaveBeenCalledTimes(2);
-  //       expect(dispatch).toHaveBeenNthCalledWith(1, {
-  //         type: ActionType.BEGIN_COMMENT_POST,
-  //       });
-  //       expect(dispatch).toHaveBeenNthCalledWith(2, {
-  //         type: ActionType.SET_COMMENT_POST_ERROR,
-  //         payload: {error: true},
-  //       });
-  //     });
-  // });
 });
