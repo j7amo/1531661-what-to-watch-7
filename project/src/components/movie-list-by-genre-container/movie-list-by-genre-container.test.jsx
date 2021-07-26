@@ -35,7 +35,7 @@ describe('Components : ConnectedMovieListByGenreContainer', () => {
             name: 'Movie3',
           },
         ],
-      }
+      },
     });
 
     render(
@@ -43,7 +43,7 @@ describe('Components : ConnectedMovieListByGenreContainer', () => {
         <Router history={history}>
           <ConnectedMovieListByGenreContainer />
         </Router>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByTestId(/movie-list-catalog/i)).toBeInTheDocument();

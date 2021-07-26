@@ -71,7 +71,7 @@ describe('Components : ConnectedMainPage', () => {
           name: 'Titanic',
           genre: 'Comedy',
           released: 666,
-        }
+        },
       },
       favoriteMovies: {
         favoriteMovies: [
@@ -81,8 +81,8 @@ describe('Components : ConnectedMainPage', () => {
             genre: 'Comedy',
             released: 666,
           },
-        ]
-      }
+        ],
+      },
     });
   });
 
@@ -93,7 +93,7 @@ describe('Components : ConnectedMainPage', () => {
         <Router history={history}>
           <ConnectedMainPage />
         </Router>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByText(/666/i)).toBeInTheDocument();

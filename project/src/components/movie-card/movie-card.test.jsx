@@ -25,7 +25,7 @@ describe('Components : ConnectedMovieCard', () => {
             name: 'Movie123',
           },
         ],
-      }
+      },
     });
 
     render(
@@ -33,7 +33,7 @@ describe('Components : ConnectedMovieCard', () => {
         <Router history={history}>
           <ConnectedMovieCard movieID={fakeID}/>
         </Router>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByTestId(/film-card-in-movie-list/i)).toBeInTheDocument();

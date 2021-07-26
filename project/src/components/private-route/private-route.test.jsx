@@ -17,11 +17,11 @@ describe('Components : ConnectedPrivateRoute', () => {
     mockStore = configureStore({});
   });
 
-  it('should render component for public route when user not authorized', function () {
+  it('should render component for public route when user not authorized', () => {
     const store = mockStore({
       authorizationStatus: {
         status: AuthorizationStatus.NO_AUTH,
-      }
+      },
     });
 
     render(
@@ -41,11 +41,11 @@ describe('Components : ConnectedPrivateRoute', () => {
     expect(screen.queryByText(/Private Route/i)).not.toBeInTheDocument();
   });
 
-  it('should render component for private route when user is authorized', function () {
+  it('should render component for private route when user is authorized', () => {
     const store = mockStore({
       authorizationStatus: {
         status: AuthorizationStatus.AUTH,
-      }
+      },
     });
 
     render(

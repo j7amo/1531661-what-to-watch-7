@@ -72,7 +72,7 @@ describe('Application Routing', () => {
           name: 'Titanic',
           genre: 'Comedy',
           released: 666,
-        }
+        },
       },
       favoriteMovies: {
         favoriteMovies: [
@@ -82,8 +82,8 @@ describe('Application Routing', () => {
             genre: 'Comedy',
             released: 666,
           },
-        ]
-      }
+        ],
+      },
     });
 
     fakeApp = (

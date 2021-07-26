@@ -94,7 +94,7 @@ describe('Components : ConnectedFilm', () => {
               'Kolya',
             ],
           },
-        ]
+        ],
       },
     });
 
@@ -103,7 +103,7 @@ describe('Components : ConnectedFilm', () => {
         <Router history={history}>
           <ConnectedFilm />
         </Router>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByText(/Titanic/i)).toBeInTheDocument();

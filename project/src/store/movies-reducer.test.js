@@ -71,7 +71,7 @@ describe('Reducers: moviesReducer', () => {
       requestResult: RequestResult.FAILED,
       movies: [],
       error: {
-        message: 'some error'
+        message: 'some error',
       },
     };
 

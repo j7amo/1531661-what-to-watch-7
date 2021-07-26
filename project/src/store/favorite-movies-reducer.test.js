@@ -27,7 +27,7 @@ const initialStateWithFavoriteMovie = {
         'Actor4',
       ],
       isFavorite: true,
-    }
+    },
   ],
   error: null,
   favoriteMovieRequestStatus: RequestStatus.IDLE,
@@ -104,7 +104,7 @@ describe('Reducers: favoriteMoviesReducer', () => {
       requestResult: RequestResult.FAILED,
       favoriteMovies: [],
       error: {
-        message: 'some error'
+        message: 'some error',
       },
       favoriteMovieRequestStatus: RequestStatus.IDLE,
       favoriteMovieRequestResult: null,

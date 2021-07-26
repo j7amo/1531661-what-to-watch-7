@@ -10,10 +10,10 @@ const initialState = {
 };
 
 const promoMovieMock = {
-    name: 'Movie1',
-    starring: [
-      'Actor1',
-    ],
+  name: 'Movie1',
+  starring: [
+    'Actor1',
+  ],
 };
 
 const errorMock = {message: 'some error'};

@@ -5,18 +5,18 @@ import MovieReviews from './movie-reviews';
 describe('Components : MovieReviews', () => {
   it('should render correctly', () => {
     const fakeReviews = [
-        {
-          comment: 'Hello world',
-          rating: 10,
-          user : {
-            name: 'Ivan',
-          },
-          date: 'June 3, 2021',
+      {
+        comment: 'Hello world',
+        rating: 10,
+        user : {
+          name: 'Ivan',
         },
+        date: 'June 3, 2021',
+      },
     ];
 
     render(
-      <MovieReviews reviews={fakeReviews}/>
+      <MovieReviews reviews={fakeReviews}/>,
     );
 
     expect(screen.getByTestId(/reviews-tab-content/i)).toBeInTheDocument();

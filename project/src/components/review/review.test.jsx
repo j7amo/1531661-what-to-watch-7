@@ -14,7 +14,7 @@ describe('Components: Review', () => {
     };
 
     render(
-      <Review review={fakeReview}/>
+      <Review review={fakeReview}/>,
     );
 
     expect(screen.getByText(/Hello world/i)).toBeInTheDocument();

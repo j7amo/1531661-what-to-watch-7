@@ -16,11 +16,11 @@ describe('Components: UserBlock', () => {
     mockStore = configureStore({});
   });
 
-  it('should render correctly', () => {
+  it('should render correctly with user authorized', () => {
     const store = mockStore({
-        authorizationStatus: {
-          status: AuthorizationStatus.AUTH,
-        }
+      authorizationStatus: {
+        status: AuthorizationStatus.AUTH,
+      },
     });
 
     render(
@@ -34,11 +34,11 @@ describe('Components: UserBlock', () => {
     expect(screen.getByText(/Sign out/i)).toBeInTheDocument();
   });
 
-  it('should render correctly', () => {
+  it('should render correctly with user unauthorized', () => {
     const store = mockStore({
       authorizationStatus: {
         status: AuthorizationStatus.NO_AUTH,
-      }
+      },
     });
 
     render(

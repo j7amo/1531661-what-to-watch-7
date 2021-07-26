@@ -22,6 +22,8 @@ function getComponentByCurrentTab(tab, movie, reviews) {
       return <MovieDetails movie={movie}/>;
     case MovieTab.REVIEWS:
       return <MovieReviews reviews={reviews}/>;
+    default:
+      break;
   }
 }
 
@@ -41,6 +43,8 @@ function MovieTabs({currentMovie, currentComments}) {
           break;
         case MovieTab.REVIEWS:
           setCurrentTab(MovieTab.REVIEWS);
+          break;
+        default:
           break;
       }
     }

@@ -8,7 +8,7 @@ describe('Components : ToastMessage', () => {
     const fakeMessage = 'Hello world';
 
     render(
-      <ToastMessage message={fakeMessage}/>
+      <ToastMessage message={fakeMessage}/>,
     );
 
     expect(screen.getByText(/Hello world/i)).toBeInTheDocument();

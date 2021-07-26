@@ -38,7 +38,7 @@ describe('Components : ConnectedGenresList', () => {
             genre: 'Action',
           },
         ],
-      }
+      },
     });
 
     render(

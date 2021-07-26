@@ -16,7 +16,7 @@ export const MovieRating = {
   AWESOME: 'Awesome',
 };
 
-export const MovieRatingLimits = {
+export const MovieRatingLimit = {
   BAD_LOWER_LIMIT: 0,
   BAD_UPPER_LIMIT: 3,
   NORMAL_LOWER_LIMIT: 3,
@@ -65,6 +65,6 @@ export const APIRoute = {
   SIGN_OUT: '/logout',
 };
 
-export const ToastMessages = {
+export const ToastErrorMessage = {
   REVIEW_ADD_ERROR: 'There was a problem while adding your review. Please check if you specified the rating and your comment has correct length (minimum 50 symbols and 400 symbols maximum)',
 };

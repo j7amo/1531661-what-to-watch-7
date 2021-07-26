@@ -49,7 +49,7 @@ describe('Components : ConnectedMyList', () => {
             name: 'Movie3',
           },
         ],
-      }
+      },
     });
 
     render(

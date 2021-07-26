@@ -132,7 +132,7 @@ describe('Reducers: currentMovieReducer', () => {
       currentSimilarMovies: [],
       currentComments: [],
       currentMovieError: {
-        message: 'some error'
+        message: 'some error',
       },
       commentPostRequestStatus: RequestStatus.IDLE,
       commentPostRequestResult: null,

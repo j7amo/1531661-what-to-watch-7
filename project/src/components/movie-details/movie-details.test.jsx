@@ -13,7 +13,7 @@ describe('Components : MovieDetails', () => {
     };
 
     render(
-      <MovieDetails movie={fakeMovie}/>
+      <MovieDetails movie={fakeMovie}/>,
     );
 
     expect(screen.getByText(/Run Time/i)).toBeInTheDocument();

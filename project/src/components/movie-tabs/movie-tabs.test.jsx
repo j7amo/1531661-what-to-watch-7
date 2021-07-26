@@ -36,7 +36,7 @@ describe('Components : ConnectedMovieTabs', () => {
             date: 'June 3, 2021',
           },
         ],
-      }
+      },
     });
 
     render(
@@ -44,7 +44,7 @@ describe('Components : ConnectedMovieTabs', () => {
         <Router history={history}>
           <ConnectedMovieTabs />
         </Router>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByText(/Arnold Schwarz-Magomaev/i)).toBeInTheDocument();

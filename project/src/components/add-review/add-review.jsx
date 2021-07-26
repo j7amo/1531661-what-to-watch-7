@@ -115,7 +115,7 @@ AddReview.propTypes = {
     PropTypes.oneOfType(
       [movieProp],
     )),
-  error: PropTypes.oneOfType([null, string]),
+  error: PropTypes.oneOfType([string]),
   onFormSubmitClick: PropTypes.func,
   onPageLeave: PropTypes.func,
 };

@@ -10,11 +10,11 @@ describe('Reducers: authReducer', () => {
 
     const authState = {
       status: AuthorizationStatus.AUTH,
-    }
+    };
 
     const noAuthState = {
       status: AuthorizationStatus.NO_AUTH,
-    }
+    };
 
     expect(authReducer(initialState, setAuthorizationStatus(AuthorizationStatus.AUTH))).toEqual(authState);
     expect(authReducer(initialState, setAuthorizationStatus(AuthorizationStatus.NO_AUTH))).toEqual(noAuthState);
