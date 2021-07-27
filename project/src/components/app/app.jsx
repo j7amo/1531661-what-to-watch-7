@@ -12,6 +12,7 @@ import NoSuchPage from '../no-such-page/no-such-page';
 import {connect} from 'react-redux';
 import LoadingScreen from '../loading-screen/loading-screen.jsx';
 import {default as PrivateRoute} from '../private-route/private-route';
+import {getMoviesRequestStatus} from '../../store/selectors';
 
 function App({isLoading}) {
 
@@ -51,7 +52,7 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  isLoading: state.movies.requestStatus,
+  isLoading: getMoviesRequestStatus(state),
 });
 
 const ConnectedApp = connect(mapStateToProps)(App);

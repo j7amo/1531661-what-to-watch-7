@@ -6,6 +6,7 @@ import movieProp from '../film/film.prop.js';
 import { connect } from 'react-redux';
 import { SECONDS_IN_HOUR, SECONDS_IN_MINUTE } from '../../const';
 import LoadingScreen from '../loading-screen/loading-screen';
+import {getMovies} from '../../store/selectors';
 
 const MAX_PROGRESS_BAR_VALUE = 100;
 const TIME_LOWER_LIMIT = 0;
@@ -208,7 +209,7 @@ Player.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  movies: state.movies.movies,
+  movies: getMovies(state),
 });
 
 const ConnectedPlayer = connect(mapStateToProps)(Player);

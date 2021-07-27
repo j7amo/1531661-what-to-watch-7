@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {AuthorizationStatus} from '../../const.js';
 import {signOut} from '../../store/api-actions.js';
+import {getAuthorizationStatus} from '../../store/selectors';
 
 function UserBlock({authorizationStatus, onSignOutClick}) {
 
@@ -41,7 +42,7 @@ function UserBlock({authorizationStatus, onSignOutClick}) {
 }
 
 const mapStateToProps = (state) => ({
-  authorizationStatus: state.authorizationStatus.status,
+  authorizationStatus: getAuthorizationStatus(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

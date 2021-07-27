@@ -67,4 +67,5 @@ export const APIRoute = {
 
 export const ToastErrorMessage = {
   REVIEW_ADD_ERROR: 'There was a problem while adding your review. Please check if you specified the rating and your comment has correct length (minimum 50 symbols and 400 symbols maximum)',
+  SIGN_IN_PASSWORD_ERROR: 'There was a problem while signing in. Please check if your password is correct: it cannot be empty or consist only of space characters.',
 };

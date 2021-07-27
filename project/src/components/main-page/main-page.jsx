@@ -4,25 +4,28 @@ import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import UserBlock from '../user-block/user-block';
 import Footer from '../footer/footer';
-import { Link } from 'react-router-dom';
 import GenresList from '../genres-list/genres-list';
 import ConnectedMovieListByGenreContainer from '../movie-list-by-genre-container/movie-list-by-genre-container';
 import { connect } from 'react-redux';
 import {
   getAuthorizationStatus,
-  getIsFavoriteMovie,
+  getIsFavoriteMovie, getMoviesRequestStatus,
   getPromoMovieBackgroundImage,
   getPromoMovieGenre,
   getPromoMovieID,
   getPromoMovieName, getPromoMoviePosterImage,
-  getPromoMovieReleasedDate
+  getPromoMovieReleasedDate, getPromoMovieRequestResult
 } from '../../store/selectors';
 import {fetchFavoriteMoviesData, postFavoriteMovieStatus} from '../../store/api-actions';
-import {AuthorizationStatus, FavoriteStatus} from '../../const';
+import {AuthorizationStatus, FavoriteStatus, RequestResult} from '../../const';
+import NoSuchPage from '../no-such-page/no-such-page';
+import { Link } from 'react-router-dom';
 
 function MainPage(props) {
 
   const {
+    promoMovieRequestResult,
+    moviesRequestResult,
     id,
     name,
     genre,
@@ -40,6 +43,12 @@ function MainPage(props) {
       onMainPageComponentLayoutRendered();
     }
   },[authorizationStatus]);
+
+  if (promoMovieRequestResult === RequestResult.FAILED || moviesRequestResult === RequestResult.FAILED) {
+    return (
+      <NoSuchPage />
+    );
+  }
 
   return (
     <React.Fragment>
@@ -70,13 +79,11 @@ function MainPage(props) {
               </p>
 
               <div className="film-card__buttons">
-                <Link to={`/player/${id}`}>
-                  <button className="btn btn--play film-card__button" type="button">
-                    <svg viewBox="0 0 19 19" width="19" height="19">
-                      <use xlinkHref="#play-s"/>
-                    </svg>
-                    <span>Play</span>
-                  </button>
+                <Link className="btn btn--play film-card__button" to={`/player/${id}`}>
+                  <svg viewBox="0 0 19 19" width="19" height="19">
+                    <use xlinkHref="#play-s"/>
+                  </svg>
+                  <span>Play</span>
                 </Link>
                 {authorizationStatus === AuthorizationStatus.AUTH &&
                 <button className="btn btn--list film-card__button" type="button" onClick={() => onMyListClick(id, (isFavorite ? FavoriteStatus.REMOVED_FROM_FAVORITES : FavoriteStatus.ADDED_TO_FAVORITES))}>
@@ -110,6 +117,8 @@ function MainPage(props) {
 }
 
 MainPage.propTypes = {
+  promoMovieRequestResult: PropTypes.string,
+  moviesRequestResult: PropTypes.string,
   id: PropTypes.number,
   name: PropTypes.string,
   genre: PropTypes.string,
@@ -123,6 +132,8 @@ MainPage.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
+  promoMovieRequestResult: getPromoMovieRequestResult(state),
+  moviesRequestResult: getMoviesRequestStatus(state),
   id: getPromoMovieID(state),
   name: getPromoMovieName(state),
   genre: getPromoMovieGenre(state),

@@ -11,6 +11,7 @@ import ToastMessage from '../toast-message/toast-message.jsx';
 import { postComment } from '../../store/api-actions.js';
 import { connect } from 'react-redux';
 import {clearCommentPostError} from '../../store/action.js';
+import {getCommentPostRequestStatus, getCurrentMovieCommentPostError, getMovies} from '../../store/selectors';
 
 const MIN_COMMENT_LENGTH = 50;
 const MAX_COMMENT_LENGTH = 400;
@@ -23,6 +24,7 @@ function AddReview({isLoading, onPageLeave, movies, error, onFormSubmitClick}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { name, backgroundImage, posterImage } = movies.find((movie) => movie.id === Number(id));
   const isInitialMount = useRef(true);
+  const isDisabled = isLoading === RequestStatus.LOADING || ratingStars === 0 || reviewText.length < MIN_COMMENT_LENGTH || reviewText.length > MAX_COMMENT_LENGTH;
 
   function handleRatingStarsChange(evt) {
     evt.preventDefault();
@@ -95,9 +97,21 @@ function AddReview({isLoading, onPageLeave, movies, error, onFormSubmitClick}) {
             </div>
 
             <div className="add-review__text">
-              <textarea className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text" onChange={handleReviewTextChange} value={reviewText} minLength={MIN_COMMENT_LENGTH} maxLength={MAX_COMMENT_LENGTH} required disabled={isLoading === RequestStatus.LOADING} data-testid="review-text"/>
+              <textarea
+                className="add-review__textarea"
+                name="review-text"
+                id="review-text"
+                placeholder="Review text"
+                onChange={handleReviewTextChange}
+                value={reviewText}
+                minLength={MIN_COMMENT_LENGTH}
+                maxLength={MAX_COMMENT_LENGTH}
+                required
+                disabled={isLoading === RequestStatus.LOADING}
+                data-testid="review-text"
+              />
               <div className="add-review__submit">
-                <button className="add-review__btn" type="submit" disabled={isLoading === RequestStatus.LOADING || ratingStars === 0 || reviewText.length < MIN_COMMENT_LENGTH || reviewText.length > MAX_COMMENT_LENGTH}>Post</button>
+                <button className="add-review__btn" type="submit" disabled={isDisabled}>Post</button>
               </div>
             </div>
           </form>
@@ -121,9 +135,9 @@ AddReview.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  isLoading: state.currentMovie.commentPostRequestStatus,
-  movies: state.movies.movies,
-  error: state.currentMovie.commentPostError,
+  isLoading: getCommentPostRequestStatus(state),
+  movies: getMovies(state),
+  error: getCurrentMovieCommentPostError(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import { ToastErrorMessage } from '../../const.js';
 
-const TOAST_DURATION = 10000;
+const TOAST_DURATION = 30000;
 const ERROR_CODE = '400';
 
 function ToastMessage({message}) {
@@ -14,7 +14,9 @@ function ToastMessage({message}) {
 
   useEffect(() => {
     setShowToast(true);
-    setTimeout(() => setShowToast(false), TOAST_DURATION);
+    const timerID = setTimeout(() => setShowToast(false), TOAST_DURATION);
+
+    return clearTimeout(timerID);
   },[]);
 
   return (

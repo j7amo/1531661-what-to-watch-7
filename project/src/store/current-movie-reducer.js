@@ -2,8 +2,6 @@ import { ActionType } from './action.js';
 import {RequestResult, RequestStatus} from '../const.js';
 import {adaptMovieDataToClient} from './api-actions.js';
 
-const MAX_SIMILAR_MOVIES_NUMBER = 4;
-
 const initialState = {
   currentMovieRequestStatus: RequestStatus.IDLE,
   currentMovieRequestResult: null,
@@ -33,10 +31,7 @@ const currentMovieReducer = (state = initialState, action) => {
         currentMovieRequestStatus: RequestStatus.IDLE,
         currentMovieRequestResult: RequestResult.SUCCEEDED,
         currentMovie: adaptMovieDataToClient(action.payload[0]),
-        currentSimilarMovies: action.payload[1]
-          .filter((localMovie) => localMovie.id !== Number(action.payload[0].id))
-          .slice(0, MAX_SIMILAR_MOVIES_NUMBER)
-          .map((similarMovie) => adaptMovieDataToClient(similarMovie)),
+        currentSimilarMovies: action.payload[1].map((similarMovie) => adaptMovieDataToClient(similarMovie)),
         currentComments: action.payload[2],
       };
     case ActionType.SET_CURRENT_MOVIE_ERROR:

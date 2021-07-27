@@ -6,6 +6,7 @@ import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import ConnectedSignIn from './sign-in';
 import userEvent from '@testing-library/user-event';
+import {AuthorizationStatus} from '../../const';
 
 let history = null;
 let mockStore = null;
@@ -17,7 +18,9 @@ describe('Components : ConnectedSignIn', () => {
   });
 
   it('should render correctly and let user type in some data', () => {
-    const store = mockStore({});
+    const store = mockStore({
+      authorizationStatus: AuthorizationStatus.NO_AUTH,
+    });
 
     render(
       <Provider store={store}>

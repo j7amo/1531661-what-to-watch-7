@@ -1,24 +1,37 @@
-import React, {useRef} from 'react';
+import React, { useRef, useState } from 'react';
 import SvgInjector from '../svg-injector/svg-injector';
 import SiteLogo from '../site-logo/site-logo';
 import Footer from '../footer/footer';
-import {signIn} from '../../store/api-actions';
-import {connect} from 'react-redux';
+import { signIn } from '../../store/api-actions';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import ToastMessage from '../toast-message/toast-message';
+import {AppRoute, AuthorizationStatus, ToastErrorMessage} from '../../const';
+import {getAuthorizationStatus} from '../../store/selectors';
+import {Redirect} from 'react-router-dom';
 
-function SignIn({onSubmit}) {
+function SignIn({onSubmit, authorizationStatus}) {
 
+  const [passwordError, setPasswordError] = useState(false);
   const loginRef = useRef();
   const passwordRef = useRef();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    onSubmit({
-      email: loginRef.current.value,
-      password: passwordRef.current.value,
-    });
+    if (passwordRef.current.value.replaceAll(' ', '').length > 0) {
+      onSubmit({
+        email: loginRef.current.value,
+        password: passwordRef.current.value,
+      });
+    } else {
+      setPasswordError(true);
+    }
   };
+
+  if (authorizationStatus === AuthorizationStatus.AUTH) {
+    return <Redirect to={AppRoute.MAIN} />;
+  }
 
   return (
     <React.Fragment>
@@ -46,6 +59,7 @@ function SignIn({onSubmit}) {
               <button className="sign-in__btn" type="submit">Sign in</button>
             </div>
           </form>
+          {passwordError && <ToastMessage message={ToastErrorMessage.SIGN_IN_PASSWORD_ERROR}/>}
         </div>
 
         <Footer />
@@ -53,6 +67,9 @@ function SignIn({onSubmit}) {
     </React.Fragment>
   );
 }
+const mapStateToProps = (state) => ({
+  authorizationStatus: getAuthorizationStatus(state),
+});
 
 const mapDispatchToProps = (dispatch) => ({
   onSubmit(credentials) {
@@ -60,10 +77,11 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-const ConnectedSignIn = connect(null, mapDispatchToProps)(SignIn);
+const ConnectedSignIn = connect(mapStateToProps, mapDispatchToProps)(SignIn);
 
 SignIn.propTypes = {
   onSubmit: PropTypes.func,
+  authorizationStatus: PropTypes.string,
 };
 
 export default ConnectedSignIn;

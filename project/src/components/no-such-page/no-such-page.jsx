@@ -11,8 +11,11 @@ function NoSuchPage({onMainClick}) {
       <h1>
         404. Page Not Found
       </h1>
+      <p>
+        If you entered a web address please check if it was correct. If you are certain that it was correct there might be some server maintenance going on right now.
+      </p>
       <Link to='/' onClick={onMainClick}>
-        Go to main page!
+        Try to go to main page!
       </Link>
     </>
   );

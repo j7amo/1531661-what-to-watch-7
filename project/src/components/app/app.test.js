@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { App } from './app';
 import thunk from 'redux-thunk';
-import { AppRoute, AuthorizationStatus, RequestStatus } from '../../const';
+import {AppRoute, AuthorizationStatus, RequestStatus} from '../../const';
 import { createApi } from '../../services/api';
 import userEvent from '@testing-library/user-event';
 
@@ -14,6 +14,7 @@ let history = null;
 let mockStore = null;
 let fakeApp = null;
 let api = null;
+let store = null;
 
 describe('Application Routing', () => {
   beforeAll(() => {
@@ -21,7 +22,7 @@ describe('Application Routing', () => {
     history = createMemoryHistory();
     mockStore = configureStore([thunk.withExtraArgument(api)]);
 
-    const store = mockStore({
+    store = mockStore({
       filters: {
         currentGenre: 'Comedy',
       },
@@ -104,21 +105,6 @@ describe('Application Routing', () => {
     expect(screen.getByText(/Comedy/i, {selector: 'span'})).toBeInTheDocument();
   });
 
-  it('should render SignIn component when user navigate to "/login" ', () => {
-    history.push(AppRoute.SIGN_IN);
-    render(fakeApp);
-
-    expect(screen.getByText(/Email address/i)).toBeInTheDocument();
-    expect(screen.getByText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button').textContent).toBe('Sign in');
-
-    userEvent.type(screen.getByTestId(/email-input/i), '123@gmail.com');
-    userEvent.type(screen.getByTestId(/password-input/i), '123456');
-
-    expect(screen.getByDisplayValue(/123@gmail.com/i)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(/123456/i)).toBeInTheDocument();
-  });
-
   it('should render MyList component when user navigate to "/myList" ', () => {
     history.push(AppRoute.MY_LIST);
     render(fakeApp);
@@ -156,6 +142,94 @@ describe('Application Routing', () => {
 
     expect(screen.getByText(/404. Page Not Found/i)).toBeInTheDocument();
     expect(screen.getByText(/Go to main page!/i)).toBeInTheDocument();
+  });
+
+  it('should render SignIn component when user navigate to "/login" ', () => {
+    store = mockStore({
+      filters: {
+        currentGenre: 'Comedy',
+      },
+      authorizationStatus: {
+        status: AuthorizationStatus.NO_AUTH,
+      },
+      movies: {
+        movies: [
+          {
+            id: 1,
+            name: 'Titanic',
+            genre: 'Comedy',
+            released: 666,
+          },
+          {
+            id: 2,
+            name: 'Botanic',
+            genre: 'Comedy',
+            released: 777,
+          },
+        ],
+        requestStatus: RequestStatus.IDLE,
+      },
+      currentMovie: {
+        currentMovieRequestStatus: RequestStatus.IDLE,
+        currentMovie: {
+          id: 1,
+          name: 'Titanic',
+          genre: 'Comedy',
+          released: 666,
+          starring: [
+            'Vasya',
+            'Kolya',
+          ],
+        },
+        currentSimilarMovies: [
+          {
+            id: 2,
+            name: 'Botanic',
+            genre: 'Comedy',
+            released: 777,
+          },
+        ],
+      },
+      promoMovie: {
+        promoMovie: {
+          id: 1,
+          name: 'Titanic',
+          genre: 'Comedy',
+          released: 666,
+        },
+      },
+      favoriteMovies: {
+        favoriteMovies: [
+          {
+            id: 1,
+            name: 'Titanic',
+            genre: 'Comedy',
+            released: 666,
+          },
+        ],
+      },
+    });
+
+    fakeApp = (
+      <Provider store={store}>
+        <Router history={history}>
+          <App />
+        </Router>
+      </Provider>
+    );
+
+    history.push(AppRoute.SIGN_IN);
+    render(fakeApp);
+
+    expect(screen.getByText(/Email address/i)).toBeInTheDocument();
+    expect(screen.getByText(/Password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button').textContent).toBe('Sign in');
+
+    userEvent.type(screen.getByTestId(/email-input/i), '123@gmail.com');
+    userEvent.type(screen.getByTestId(/password-input/i), '123456');
+
+    expect(screen.getByDisplayValue(/123@gmail.com/i)).toBeInTheDocument();
+    expect(screen.getByDisplayValue(/123456/i)).toBeInTheDocument();
   });
 
 });

@@ -7,9 +7,17 @@ import MovieList from '../movie-list/movie-list';
 import Footer from '../footer/footer';
 import movieProp from '../film/film.prop.js';
 import { connect } from 'react-redux';
-import { getFavoriteMovies } from '../../store/selectors';
+import {getFavoriteMovies, getFavoriteMoviesRequestResult} from '../../store/selectors';
+import {RequestResult} from '../../const';
+import NoSuchPage from '../no-such-page/no-such-page';
 
-function MyList({favoriteMovies}) {
+function MyList({favoriteMovies, favoriteMovieRequestResult}) {
+
+  if (favoriteMovieRequestResult === RequestResult.FAILED) {
+    return (
+      <NoSuchPage />
+    );
+  }
 
   return (
     <React.Fragment>
@@ -37,10 +45,12 @@ MyList.propTypes = {
     PropTypes.oneOfType(
       [movieProp],
     )),
+  favoriteMovieRequestResult: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({
   favoriteMovies: getFavoriteMovies(state),
+  favoriteMovieRequestResult: getFavoriteMoviesRequestResult(state),
 });
 
 const ConnectedMyList = connect(mapStateToProps)(MyList);
